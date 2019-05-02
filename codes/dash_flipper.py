@@ -11,11 +11,13 @@ from pymeasure.instruments.newport import ESP300
 
 serial = b'37000805'
 ctrl = ESP300("GPIB0::3::INSTR")
-ctrl.data_bits = 8
-ctrl.baud_rate = 19200
-ctrl.StopBits = 1
-ctrl.read_termination = '\r\n'
-ctrl.write_termination = '\r'
+
+def defaultset():  # dont think this works as it should.
+    ctrl.data_bits = 8
+    ctrl.baud_rate = 19200
+    ctrl.StopBits = 1
+    ctrl.read_termination = '\r\n'
+    ctrl.write_termination = '\r'
 
 app = dash.Dash(__name__)
 server = app.server
@@ -69,11 +71,13 @@ root_layout = html.Div(
                 #                 'float': 'right',
                 #                 'right': '10px',
                 #                 'height': '75px'})
-        ], className='banner', style={
-            'height': '75px',
-            'margin': '0px -10px 10px',
-            'background-color': '#EBF0F8',
-            }),
+        ], className='banner',
+            style={
+                'height': '75px',
+                'margin': '0px -10px 10px',
+                'background-color': '#EBF0F8',
+            },
+        ),
         html.Div([
             html.H3("XYZ Controller Info", className="six columns"),
         ],  className='row Title'),
@@ -109,6 +113,54 @@ root_layout = html.Div(
 
         html.Div([
             html.Div([
+                html.H3("XYZ-Setting")
+            ], className='Title'),
+            html.Div([
+                html.Div([
+                    dcc.Input(
+                        id="input-submit",
+                        placeholder="x-position",
+                        type="text",
+                        value="",
+                        style={
+                            "width": "35%",
+                            "marginLeft": "13.87%",
+                            "marginTop": "3%",
+                        },
+                    ),
+                    html.Div(id='output-submit')
+                ], className="row"),
+                # html.Div([
+                #     dcc.Input(
+                #         id="y-set",
+                #         placeholder="y-position",
+                #         type="text",
+                #         value="",
+                #         style={
+                #             "width": "35%",
+                #             "marginLeft": "13.87%",
+                #             "marginTop": "3%",
+                #         },
+                #     ),
+                # ], className="row"),
+                # html.Div([
+                #     dcc.Input(
+                #         id="z-set",
+                #         placeholder="z-position",
+                #         type="text",
+                #         value="",
+                #         style={
+                #             "width": "35%",
+                #             "marginLeft": "13.87%",
+                #             "marginTop": "3%",
+                #         },
+                #     ),
+                # ], className="row"),
+            ]),
+        ], className="three columns"),
+
+        html.Div([
+            html.Div([
                 html.H3("XYZ-Position")
             ], className='Title'),
             html.Div([
@@ -119,7 +171,7 @@ root_layout = html.Div(
                         className="three columns"),
                     html.Div(
                         id="x-value",
-                        className="one columns",
+                        className="two columns",
                         style={'marginRight': '20px'}),
                     html.Div(
                         "mm",
@@ -132,7 +184,7 @@ root_layout = html.Div(
                         className="three columns"),
                     html.Div(
                         id="y-value",
-                        className="one columns",
+                        className="two columns",
                         style={'marginRight': '20px'}),
                     html.Div(
                         "mm",
@@ -145,7 +197,7 @@ root_layout = html.Div(
                         className="three columns"),
                     html.Div(
                         id="z-value",
-                        className="one columns",
+                        className="two columns",
                         style={'marginRight': '20px'}),
                     html.Div(
                         "mm",
@@ -165,29 +217,82 @@ root_layout = html.Div(
                         className="one columns")
                 ], className="row"),
             ]),
-        ], className="six columns"),
+        ], className="five columns"),
 
         html.Div([
             html.Div([
                 html.H3("Laser Settings")
             ], className='Title'),
             html.Div([
-
                 daq.BooleanSwitch(
                 id='flipper-switch',
                 on=False,
-        ),
-        html.Div(
-            id='flipper-switch-output')
-        ], className="row"),
-        ])
-    ], className="six columns"
+            ),
+            html.Div(
+                id='flipper-switch-output')
+            ], className="row"),
+        ], className='three columns')
+
+
+
+
+
+    ], className="twelve columns"
 )
 
 app.layout = root_layout
 
-# Enable laser
 
+# # Enable Preset Settings
+# @app.callback(
+#     Output("pre-settings", "disabled"),
+#     [Input("x-set", "value")]
+#     # Input("y-set", "value"),
+#     # Input("z-set", "value")],
+# )
+# def presetting_enable(xpos, ypos, zpos):
+#     if (xpos != "") or (ypos != "") and (zpos != ""):
+#         return False
+#     else:
+#         return True
+
+# Preset Settings
+@app.callback(
+    Output("output-submit", "children"),
+    # [Input("pre-settings", "value")],
+    [Input("input-submit", "n_submit")],
+    [State('input-submit', 'value')]
+    # State("y-set", "value"),
+    # State("z-set", "value")]
+    # State("step-size", "value"),
+    # State("acceleration-set", "value"),
+    # State("baudrate", "value")]
+)
+def moving_x(ns1, input1):
+    # a = float(input_data)
+    # ctrl.x.position = float(input1)
+    return u'moved to "{}"'.format(input1)
+    # if (
+    #     (xpos != "")
+    #     # and (ypos != "")
+    #     # and (zpos != "")
+    #     # and (preset_switch == True)
+    # ):
+    #     ctrl.x.position = xpos
+    #     # ser.baudrate = baud
+    #     # command = "/{}m{}h{}j{}L{}RR\r".format(
+    #     #     address, motor_current, hold_current, stepsize, accel_set
+    #     # )
+    #     # ser.flush()
+    #     # ser.write(command.encode("utf-8"))
+    #     # response = str(ser.read(7)) # Make response equal to none if freezing
+    #     return ctrl.x.position
+    # else:
+    #     response = "x not read"
+    #     return response
+
+
+### Enable laser ###
 @app.callback(
     Output('flipper-switch-output', 'children'),
     [Input('flipper-switch', 'on')])
@@ -230,6 +335,7 @@ def laser(on):
         motor.close()
         return 'The laser is on : {}' .format(on)
 
+### Status XYZ Positions ###
 @app.callback(Output("x-value", "children"),
               [Input("stream", "n_intervals")],
               [State("connection-est", "value")])
@@ -238,20 +344,43 @@ def stream_x(_, connection):
         return ctrl.x.position
     return str(0)
 
-@app.callback(Output("device-version", "children"),
+# @app.callback(Output("y-value", "children"),
+#               [Input("stream", "n_intervals")],
+#               [State("connection-est", "value")])
+# def stream_y(_, connection):
+#     if connection:
+#         return ctrl.y.position
+#     return str(0)
+#
+# @app.callback(Output("z-value", "children"),
+#               [Input("stream", "n_intervals")],
+#               [State("connection-est", "value")])
+# def stream_z(_, connection):
+#     if connection:
+#         return ctrl.phi.position
+#     return str(0)
+
+
+### XYZ Device Connection ###
+@app.callback(Output("device-attached", "children"),
               [Input("connection-est", "value")])
 def device_name(connection):
     if connection:
-        return str(ctrl.name)
+        return ctrl.name
 
+@app.callback(Output("device-version", "children"),
+              [Input("connection-est", "value")])
+def device_version(connection):
+    if connection:
+        return ctrl.id
+
+
+### Connection stream ###
 @app.callback(Output("connection-est", "value"),
               [Input("upon-load", "n_intervals")])
 def connection_established(_):
     if ctrl.name is not None:
-        print('is on')
         return True
-    else:
-        print('?????')
 
 @app.callback(Output("upon-load", "interval"),
               [Input("upon-load", "n_intervals"),
@@ -262,18 +391,6 @@ def load_once(_, connection):
     return 1000
 
 
-
-
-# def enable_laser(stop):
-#     if stop >= 1:
-#         laser('on')
-#     else:
-#         laser('off')
-
-#
-# def update_output(on):
-#     return 'the switch is {}' .format(on)
-
-
 if __name__ == '__main__':
+    defaultset()
     app.run_server(port=8800, debug=True)
