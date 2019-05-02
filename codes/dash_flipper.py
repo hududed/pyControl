@@ -118,44 +118,44 @@ root_layout = html.Div(
             html.Div([
                 html.Div([
                     dcc.Input(
-                        id="input-submit",
+                        id="x-set",
                         placeholder="x-position",
                         type="text",
                         value="",
                         style={
                             "width": "35%",
-                            "marginLeft": "13.87%",
+                            "marginLeft": "0%",
                             "marginTop": "3%",
                         },
                     ),
-                    html.Div(id='output-submit')
+                    html.Div(id='div-one')
                 ], className="row"),
-                # html.Div([
-                #     dcc.Input(
-                #         id="y-set",
-                #         placeholder="y-position",
-                #         type="text",
-                #         value="",
-                #         style={
-                #             "width": "35%",
-                #             "marginLeft": "13.87%",
-                #             "marginTop": "3%",
-                #         },
-                #     ),
-                # ], className="row"),
-                # html.Div([
-                #     dcc.Input(
-                #         id="z-set",
-                #         placeholder="z-position",
-                #         type="text",
-                #         value="",
-                #         style={
-                #             "width": "35%",
-                #             "marginLeft": "13.87%",
-                #             "marginTop": "3%",
-                #         },
-                #     ),
-                # ], className="row"),
+                html.Div([
+                    dcc.Input(
+                        id="y-set",
+                        placeholder="y-position",
+                        type="text",
+                        value="",
+                        style={
+                            "width": "35%",
+                            "marginLeft": "0%",
+                            "marginTop": "3%",
+                        },
+                    ),
+                ], className="row"),
+                html.Div([
+                    dcc.Input(
+                        id="z-set",
+                        placeholder="z-position",
+                        type="text",
+                        value="",
+                        style={
+                            "width": "35%",
+                            "marginLeft": "0%",
+                            "marginTop": "3%",
+                        },
+                    ),
+                ], className="row"),
             ]),
         ], className="three columns"),
 
@@ -258,20 +258,25 @@ app.layout = root_layout
 
 # Preset Settings
 @app.callback(
-    Output("output-submit", "children"),
+    Output("div-one", "children"),
     # [Input("pre-settings", "value")],
-    [Input("input-submit", "n_submit")],
-    [State('input-submit', 'value')]
-    # State("y-set", "value"),
-    # State("z-set", "value")]
-    # State("step-size", "value"),
-    # State("acceleration-set", "value"),
-    # State("baudrate", "value")]
+    [Input("x-set", "n_submit"),
+     Input("y-set", "n_submit"),
+     Input("z-set", "n_submit")],
+    [State('x-set', 'value'),
+    State("y-set", "value"),
+    State("z-set", "value")]
 )
-def moving_x(ns1, input1):
-    # a = float(input_data)
-    # ctrl.x.position = float(input1)
-    return u'moved to "{}"'.format(input1)
+def moving_xy(nsx, nsy, nsz, xpos, ypos, zpos):
+    xcom = "{}".format(xpos)
+    ycom = "{}".format(ypos)
+    zcom = "{}".format(zpos)
+
+    ctrl.x.position = float(xcom)
+    ctrl.y.position = float(ycom)
+    ctrl.phi.position = float(zcom)
+    return xpos, ypos, zpos
+
     # if (
     #     (xpos != "")
     #     # and (ypos != "")
@@ -344,13 +349,13 @@ def stream_x(_, connection):
         return ctrl.x.position
     return str(0)
 
-# @app.callback(Output("y-value", "children"),
-#               [Input("stream", "n_intervals")],
-#               [State("connection-est", "value")])
-# def stream_y(_, connection):
-#     if connection:
-#         return ctrl.y.position
-#     return str(0)
+@app.callback(Output("y-value", "children"),
+              [Input("stream", "n_intervals")],
+              [State("connection-est", "value")])
+def stream_y(_, connection):
+    if connection:
+        return ctrl.y.position
+    return str(0)
 #
 # @app.callback(Output("z-value", "children"),
 #               [Input("stream", "n_intervals")],
