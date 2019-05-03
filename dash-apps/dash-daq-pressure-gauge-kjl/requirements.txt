@@ -1,0 +1,9 @@
+dash
+plotly
+numpy
+dash-renderer
+dash-html-components
+dash-core-components
+dash-daq==0.0.6
+pyserial
+pyvisa
