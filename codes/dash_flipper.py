@@ -60,7 +60,8 @@ root_layout = html.Div(
         dcc.Interval(id="upon-load", interval=1000, n_intervals=0),
         dcc.Interval(id="stream", interval=5000, n_intervals=0),
 
-        html.Div([
+        html.Div(
+            [
                 html.H2("AutoPatterning Setup",
                         className="five columns",
                         style={'color': '#1d1d1d',
@@ -88,160 +89,199 @@ root_layout = html.Div(
                 #                 'float': 'right',
                 #                 'right': '10px',
                 #                 'height': '75px'})
-        ], className='row',
-            style={
-                'height': '75px',
-                'margin': '0px -10px 10px',
-                'background-color': '#EBF0F8'},
+            ], className='row',
+                style={
+                    'height': '75px',
+                    'margin': '0px -10px 10px',
+                    'background-color': '#EBF0F8'},
         ),
-        html.Div([
+        html.Div(
+            [
             html.H3("XYZ Controller Info", className="six columns"),
-        ],  className='row Title'),
-        html.Div([
-            html.Div([
-                html.Div("Attached:", className="two columns"),
-                html.Div("Disconnected",
-                         id="device-attached",
-                         className="nine columns"),
-                daq.Indicator(
-                    id="connection-est",
-                    value=False,
-                    className="one columns",
-                    style={'margin': '6px'}
-                )
-            ], className="row attachment"),
-            html.Hr(style={'marginBottom': '0', 'marginTop': '0'}),
-            html.Div([
-                html.Div("Version:", className="two columns"),
-                html.Div("Disconnected",
-                         id="device-version",
-                         className="four columns"),
-                html.Div("Serial Number:", className="two columns"),
-                html.Div("Disconnected", id="device-serial")
-            ], className="row version-serial"),
-        ]),
-
-        html.Div([
-            html.Div([
-                html.H3("XYZ-Setting")
-            ], className='Title'),
-            html.Div([
-                html.Div([
-                    dcc.Input(
-                        id="x-set",
-                        placeholder="x-position",
-                        type="text",
-                        value="",
-                        style={
-                            "width": "35%",
-                            "marginLeft": "0%",
-                            "marginTop": "3%",
-                        },
-                    ),
-                    html.Div(id='div-one')
-                ], className="row"),
-                html.Div([
-                    dcc.Input(
-                        id="y-set",
-                        placeholder="y-position",
-                        type="text",
-                        value="",
-                        style={
-                            "width": "35%",
-                            "marginLeft": "0%",
-                            "marginTop": "3%",
-                        },
-                    ),
-                ], className="row"),
-                html.Div([
-                    dcc.Input(
-                        id="z-set",
-                        placeholder="z-position",
-                        type="text",
-                        value="",
-                        style={
-                            "width": "35%",
-                            "marginLeft": "0%",
-                            "marginTop": "3%",
-                        },
-                    ),
-                ], className="row"),
-            ]),
-        ], className="three columns"),
-
-        html.Div([
-            html.Div([
-                html.H3("XYZ-Position")
-            ], className='Title'),
-            html.Div([
-                html.Div([
-                    html.Div(
-                        "X-axis:",
-                        style={'textAlign': 'right'},
-                        className="three columns"),
-                    html.Div(
-                        id="x-value",
-                        className="two columns",
-                        style={'marginRight': '20px'}),
-                    html.Div(
-                        "mm",
-                        className="one columns")
-                ], className="row"),
-                html.Div([
-                    html.Div(
-                        "Y-axis:",
-                        style={'textAlign': 'right'},
-                        className="three columns"),
-                    html.Div(
-                        id="y-value",
-                        className="two columns",
-                        style={'marginRight': '20px'}),
-                    html.Div(
-                        "mm",
-                        className="one columns")
-                ], className="row"),
-                html.Div([
-                    html.Div(
-                        "Z-axis:",
-                        style={'textAlign': 'right'},
-                        className="three columns"),
-                    html.Div(
-                        id="z-value",
-                        className="two columns",
-                        style={'marginRight': '20px'}),
-                    html.Div(
-                        "mm",
-                        className="one columns")
-                ], className="row"),
-                html.Div([
-                    html.Div(
-                        "Time Stamp:",
-                        style={'textAlign': 'right'},
-                        className="three columns"),
-                    html.Div(
-                        id="time-stamp",
-                        className="one columns",
-                        style={'marginRight': '10px'}),
-                    html.Div(
-                        "s",
-                        className="one columns")
-                ], className="row"),
-            ]),
-        ], className="five columns"),
-
-        html.Div([
-            html.Div([
-                html.H3("Laser Settings")
-            ], className='Title'),
-            html.Div([
-                daq.BooleanSwitch(
-                id='flipper-switch',
-                on=False,
-            ),
+            ],  className='row Title'
+        ),
+        html.Div(
+            [
             html.Div(
-                id='flipper-switch-output')
-            ], className="row"),
-        ], className='three columns'),
+                [
+                    html.Div("Attached:", className="two columns"),
+                    html.Div("Disconnected",
+                             id="device-attached",
+                             className="nine columns"),
+                    daq.Indicator(
+                        id="connection-est",
+                        value=False,
+                        className="one columns",
+                        style={'margin': '6px'}
+                    )
+                ], className="row attachment"
+            ),
+            html.Hr(style={'marginBottom': '0', 'marginTop': '0'}),
+            html.Div(
+                [
+                    html.Div("Version:", className="two columns"),
+                    html.Div("Disconnected",
+                             id="device-version",
+                             className="four columns"),
+                    html.Div("Serial Number:", className="two columns"),
+                    html.Div("Disconnected", id="device-serial")
+                ], className="row version-serial"),
+            ],
+        ),
+
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H3("XYZ-Setting")
+                    ], className='Title'
+                ),
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                dcc.Input(
+                                    id="x-set",
+                                    placeholder="x-position",
+                                    type="text",
+                                    value="",
+                                    style={
+                                        "width": "35%",
+                                        "marginLeft": "0%",
+                                        "marginTop": "3%",
+                                    },
+                                ),
+                                html.Div(id='div-one')
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                            dcc.Input(
+                                id="y-set",
+                                placeholder="y-position",
+                                type="text",
+                                value="",
+                                style={
+                                    "width": "35%",
+                                    "marginLeft": "0%",
+                                    "marginTop": "3%",
+                                    },
+                                ),
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                                dcc.Input(
+                                    id="z-set",
+                                    placeholder="z-position",
+                                    type="text",
+                                    value="",
+                                    style={
+                                        "width": "35%",
+                                        "marginLeft": "0%",
+                                        "marginTop": "3%",
+                                        },
+                                ),
+                            ], className="row"
+                        ),
+                    ],
+                ),
+            ], className="three columns"
+        ),
+
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H3("XYZ-Position")
+                    ], className='Title'
+                ),
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                html.Div(
+                                    "X-axis:",
+                                    style={'textAlign': 'right'},
+                                    className="three columns"),
+                                html.Div(
+                                    id="x-value",
+                                    className="two columns",
+                                    style={'marginRight': '20px'}),
+                                html.Div(
+                                    "mm",
+                                    className="one columns")
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                                html.Div(
+                                    "Y-axis:",
+                                    style={'textAlign': 'right'},
+                                    className="three columns"),
+                                html.Div(
+                                    id="y-value",
+                                    className="two columns",
+                                    style={'marginRight': '20px'}),
+                                html.Div(
+                                    "mm",
+                                    className="one columns")
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                                html.Div(
+                                    "Z-axis:",
+                                    style={'textAlign': 'right'},
+                                    className="three columns"),
+                                html.Div(
+                                    id="z-value",
+                                    className="two columns",
+                                    style={'marginRight': '20px'}),
+                                html.Div(
+                                    "mm",
+                                    className="one columns")
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                                html.Div(
+                                    "Time Stamp:",
+                                    style={'textAlign': 'right'},
+                                    className="three columns"),
+                                html.Div(
+                                    id="time-stamp",
+                                    className="one columns",
+                                    style={'marginRight': '10px'}),
+                                html.Div(
+                                    "s",
+                                    className="one columns")
+                            ], className="row"
+                        ),
+                    ],
+                ),
+            ], className="five columns"
+        ),
+
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H3("Laser Settings")
+                    ], className='Title'
+                ),
+                html.Div(
+                    [
+                        daq.BooleanSwitch(
+                            id='flipper-switch',
+                            on=False,
+                        ),
+                        html.Div(
+                        id='flipper-switch-output')
+                    ], className="row"
+                ),
+            ], className='three columns'
+        ),
 
     ], className="twelve columns"
 )
