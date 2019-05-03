@@ -17,7 +17,7 @@ def defaultset():  # dont think this works as it should.
     ctrl.baud_rate = 19200
     ctrl.StopBits = 1
     ctrl.read_termination = '\r\n'
-    ctrl.write_termination = '\r'
+    ctrl.write_termination = '\n'
 
 app = dash.Dash(__name__)
 server = app.server
@@ -58,25 +58,41 @@ for css in external_css:
 root_layout = html.Div(
     [
         dcc.Interval(id="upon-load", interval=1000, n_intervals=0),
-        dcc.Interval(id="stream", interval=500, n_intervals=0),
+        dcc.Interval(id="stream", interval=5000, n_intervals=0),
+
         html.Div([
                 html.H2("AutoPatterning Setup",
+                        className="five columns",
                         style={'color': '#1d1d1d',
                                'margin-left': '2%',
                                'display': 'inline-block',
-                               'text-align': 'center'}),
+                               'text-align': 'center'
+                               },
+                        ),
+                daq.StopButton(
+                    id="start-stop",
+                    label="",
+                    className="five columns",
+                    n_clicks=0,
+                    style={
+                        "paddingTop": "3%",
+                        "display": "flex",
+                        "justify-content": "center",
+                        "align-items": "center",
+                    },
+                ),
+                html.Div(id='div-two'),
                 # html.Img(src="https://s3-us-west-1.amazonaws.com/plotly-tutorials/" +
                 #              "excel/dash-daq/dash-daq-logo-by-plotly-stripe.png",
                 #          style={'position': 'relative',
                 #                 'float': 'right',
                 #                 'right': '10px',
                 #                 'height': '75px'})
-        ], className='banner',
+        ], className='row',
             style={
                 'height': '75px',
                 'margin': '0px -10px 10px',
-                'background-color': '#EBF0F8',
-            },
+                'background-color': '#EBF0F8'},
         ),
         html.Div([
             html.H3("XYZ Controller Info", className="six columns"),
@@ -103,12 +119,6 @@ root_layout = html.Div(
                 html.Div("Serial Number:", className="two columns"),
                 html.Div("Disconnected", id="device-serial")
             ], className="row version-serial"),
-            # html.Div([
-            #     html.Div("Channel: ", className="two columns"),
-            #     html.Div("Disconnected",
-            #              id="device-channel",
-            #              className="four columns"),
-            # ], className="row channel")
         ]),
 
         html.Div([
@@ -231,35 +241,16 @@ root_layout = html.Div(
             html.Div(
                 id='flipper-switch-output')
             ], className="row"),
-        ], className='three columns')
-
-
-
-
+        ], className='three columns'),
 
     ], className="twelve columns"
 )
 
 app.layout = root_layout
 
-
-# # Enable Preset Settings
-# @app.callback(
-#     Output("pre-settings", "disabled"),
-#     [Input("x-set", "value")]
-#     # Input("y-set", "value"),
-#     # Input("z-set", "value")],
-# )
-# def presetting_enable(xpos, ypos, zpos):
-#     if (xpos != "") or (ypos != "") and (zpos != ""):
-#         return False
-#     else:
-#         return True
-
 # Preset Settings
 @app.callback(
     Output("div-one", "children"),
-    # [Input("pre-settings", "value")],
     [Input("x-set", "n_submit"),
      Input("y-set", "n_submit"),
      Input("z-set", "n_submit")],
@@ -276,26 +267,6 @@ def moving_xy(nsx, nsy, nsz, xpos, ypos, zpos):
     ctrl.y.position = float(ycom)
     ctrl.phi.position = float(zcom)
     return xpos, ypos, zpos
-
-    # if (
-    #     (xpos != "")
-    #     # and (ypos != "")
-    #     # and (zpos != "")
-    #     # and (preset_switch == True)
-    # ):
-    #     ctrl.x.position = xpos
-    #     # ser.baudrate = baud
-    #     # command = "/{}m{}h{}j{}L{}RR\r".format(
-    #     #     address, motor_current, hold_current, stepsize, accel_set
-    #     # )
-    #     # ser.flush()
-    #     # ser.write(command.encode("utf-8"))
-    #     # response = str(ser.read(7)) # Make response equal to none if freezing
-    #     return ctrl.x.position
-    # else:
-    #     response = "x not read"
-    #     return response
-
 
 ### Enable laser ###
 @app.callback(
@@ -356,7 +327,7 @@ def stream_y(_, connection):
     if connection:
         return ctrl.y.position
     return str(0)
-#
+
 # @app.callback(Output("z-value", "children"),
 #               [Input("stream", "n_intervals")],
 #               [State("connection-est", "value")])
@@ -364,7 +335,6 @@ def stream_y(_, connection):
 #     if connection:
 #         return ctrl.phi.position
 #     return str(0)
-
 
 ### XYZ Device Connection ###
 @app.callback(Output("device-attached", "children"),
@@ -395,6 +365,18 @@ def load_once(_, connection):
         return 3.6E6
     return 1000
 
+# Stop Button Terminate
+@app.callback(
+    Output("div-two", "children"),
+    [Input("start-stop", "n_clicks")]
+)
+def start_terminate(stop):
+    if stop >= 1:
+        ctrl.disable()
+        return
+    else:
+        response = "Terminate commands and flush serial."
+        return response
 
 if __name__ == '__main__':
     defaultset()
