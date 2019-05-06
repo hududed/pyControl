@@ -4,20 +4,14 @@ import dash_html_components as html
 import dash_core_components as dcc
 from dash.dependencies import Input, Output, State
 
-# import ftd2xx  # Thorlabs MFF101
-# import ftd2xx.defines as constants
-# from time import sleep
-# from pymeasure.instruments.newport import ESP300
+import ftd2xx  # Thorlabs MFF101
+import ftd2xx.defines as constants
+from time import sleep
+from pymeasure.instruments.newport import ESP300
+
 #
-# serial = b'37000805'
-# ctrl = ESP300("GPIB0::3::INSTR")
-#
-# def defaultset():  # dont think this works as it should.
-#     ctrl.data_bits = 8
-#     ctrl.baud_rate = 19200
-#     ctrl.StopBits = 1
-#     ctrl.read_termination = '\r\n'
-#     ctrl.write_termination = '\n'
+serial = b'37000805'
+ctrl = ESP300("GPIB0::3::INSTR")
 
 app = dash.Dash(__name__)
 server = app.server
@@ -82,7 +76,6 @@ root_layout = html.Div(
                         "align-items": "center",
                     },
                 ),
-                html.Div(id='stop-all'),
                 # html.Img(src="https://s3-us-west-1.amazonaws.com/plotly-tutorials/" +
                 #              "excel/dash-daq/dash-daq-logo-by-plotly-stripe.png",
                 #          style={'position': 'relative',
@@ -160,22 +153,19 @@ root_layout = html.Div(
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        html.Div(id='div-one'),
-                                        daq.StopButton(
+                                        html.Button(
+                                            'Move X',
                                             id="x-move",
-                                            buttonText='Move X',
-                                            label="",
                                             className="one columns",
                                             n_clicks=0,
                                             style={
                                                 "display": "flex",
                                                 "justify-content": "center",
                                                 "align-items": "center",
-                                                "marginLeft": "10%",
+                                                "marginLeft": "1%",
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        html.Div(id='move-x'),
                                         html.Div(
                                             [
                                                 html.Div(
@@ -212,22 +202,19 @@ root_layout = html.Div(
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        daq.StopButton(
+                                        html.Button(
+                                            'Move Y',
                                             id="y-move",
-                                            buttonText='Move Y',
-                                            label="",
                                             className="one columns",
                                             n_clicks=0,
                                             style={
-                                                'background-color': '#2873F7',
                                                 "display": "flex",
                                                 "justify-content": "center",
                                                 "align-items": "center",
-                                                "marginLeft": "10%",
+                                                "marginLeft": "1%",
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        html.Div(id='move-y'),
                                         html.Div(
                                             [
                                                 html.Div(
@@ -264,22 +251,19 @@ root_layout = html.Div(
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        daq.StopButton(
+                                        html.Button(
+                                            'Move Z',
                                             id="z-move",
-                                            buttonText='Move Z',
-                                            label="",
                                             className="one columns",
                                             n_clicks=0,
                                             style={
-                                                'background-color': '#2873F7',
                                                 "display": "flex",
                                                 "justify-content": "center",
                                                 "align-items": "center",
-                                                "marginLeft": "10%",
+                                                "marginLeft": "1%",
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        html.Div(id='move-z'),
                                         html.Div(
                                             [
                                                 html.Div(
@@ -316,28 +300,25 @@ root_layout = html.Div(
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        daq.StopButton(
+                                        html.Button(
+                                            'Pattern',
                                             id="pattern",
-                                            buttonText='Pattern',
-                                            label="",
                                             className="one columns",
                                             n_clicks=0,
                                             style={
-                                                'background-color': '#2873F7',
                                                 "display": "flex",
                                                 "justify-content": "center",
                                                 "align-items": "center",
-                                                "marginLeft": "10%",
+                                                "marginLeft": "1%",
                                                 "marginTop": "3%",
                                             },
                                         ),
-                                        html.Div(id='div-six'),
                                     ],
                                     className="row",
                                 ),
-
                             ],
                         ),
+
                     ],
                     className="six columns",
                 ),
@@ -361,13 +342,32 @@ root_layout = html.Div(
                         ),
                     ], className='three columns'
                 ),
+
             ],
         ),
+        # Placeholder Divs
+        html.Div(
+            [
+                html.Div(id="div-one"),
+                html.Div(id="stop-all"),
+                html.Div(id="move-x"),
+                html.Div(id="move-y"),
+                html.Div(id="move-z"),
+                # html.Div(id="div-four"),
+                # html.Div(id="com-value"),
+                # html.Div(id="color-return"),
+                # html.Div(id="velocity-store"),
+                # dcc.Interval(id="velocity-interval", interval=360000, n_intervals=0),
+            ],
+            style={"visibility": "hidden"},
+        ),
+        # html.Div(id='div-one'),
 
     ], className="twelve columns"
 )
 
 app.layout = root_layout
+
 
 # # Preset Settings
 # @app.callback(
@@ -376,8 +376,8 @@ app.layout = root_layout
 #      Input("y-set", "n_submit"),
 #      Input("z-set", "n_submit")],
 #     [State('x-set', 'value'),
-#     State("y-set", "value"),
-#     State("z-set", "value")]
+#      State("y-set", "value"),
+#      State("z-set", "value")]
 # )
 # def moving_xy(nsx, nsy, nsz, xpos, ypos, zpos):
 #     xcom = "{}".format(xpos)
@@ -388,7 +388,53 @@ app.layout = root_layout
 #     ctrl.y.position = float(ycom)
 #     ctrl.phi.position = float(zcom)
 #     return xpos, ypos, zpos
-#
+
+
+# Move Button
+@app.callback(
+    Output("move-x", "children"),
+    [Input("x-move", "n_clicks")],
+    [State("x-set", "value")]
+)
+def x_button(n_clicks, value):
+    if n_clicks >= 1:
+        ctrl.x.enable()
+        x = "{}".format(value)
+        ctrl.x.position = float(x)
+    else:
+        return
+
+
+# Move Button
+@app.callback(
+    Output("move-y", "children"),
+    [Input("y-move", "n_clicks")],
+    [State("y-set", "value")]
+)
+def y_button(n_clicks, value):
+    if n_clicks >= 1:
+        ctrl.y.enable()
+        y = "{}".format(value)
+        ctrl.y.position = float(y)
+    else:
+        return
+
+
+# Move Button
+@app.callback(
+    Output("move-z", "children"),
+    [Input("z-move", "n_clicks")],
+    [State("z-set", "value")]
+)
+def z_button(n_clicks, value):
+    if n_clicks >= 1:
+        ctrl.phi.enable()
+        z = "{}".format(value)
+        ctrl.phi.position = float(z)
+    else:
+        return
+
+
 # ### Enable laser ###
 # @app.callback(
 #     Output('flipper-switch-output', 'children'),
@@ -457,59 +503,55 @@ app.layout = root_layout
 # #         return ctrl.phi.position
 # #     return str(0)
 #
-# ### XYZ Device Connection ###
-# @app.callback(Output("device-attached", "children"),
-#               [Input("connection-est", "value")])
-# def device_name(connection):
-#     if connection:
-#         return ctrl.name
-#
-# @app.callback(Output("device-version", "children"),
-#               [Input("connection-est", "value")])
-# def device_version(connection):
-#     if connection:
-#         return ctrl.id
-#
-#
-# ### Connection stream ###
-# @app.callback(Output("connection-est", "value"),
-#               [Input("upon-load", "n_intervals")])
-# def connection_established(_):
-#     if ctrl.name is not None:
-#         return True
-#
-# @app.callback(Output("upon-load", "interval"),
-#               [Input("upon-load", "n_intervals"),
-#                Input("connection-est", "value")])
-# def load_once(_, connection):
-#     if connection is True:
-#         return 3.6E6
-#     return 1000
-#
-# # Stop Button Terminate
-# @app.callback(
-#     Output("stop-all", "children"),
-#     [Input("start-stop", "n_clicks")]
-# )
-# def start_terminate(stop):
-#     if stop >= 1:
-#         ctrl.disable()
-#         return
-#     else:
-#         response = "Terminate commands and flush serial."
-#         return response
+### XYZ Device Connection ###
+@app.callback(Output("device-attached", "children"),
+              [Input("connection-est", "value")])
+def device_name(connection):
+    if connection:
+        return ctrl.name
 
-# # Move Button Terminate
-# @app.callback(
-#     Output("move-x", "children"),
-#     [Input("x-move", "n_clicks")]
-# )
-# def x_button(stop):
-#     if stop >= 1:
-#         ctrl.disable()
-#         return
-#     else:
-#         return
+
+@app.callback(Output("device-version", "children"),
+              [Input("connection-est", "value")])
+def device_version(connection):
+    if connection:
+        return ctrl.id
+
+
+#
+#
+### Connection stream ###
+@app.callback(Output("connection-est", "value"),
+              [Input("upon-load", "n_intervals")])
+def connection_established(_):
+    if ctrl.name is not None:
+        return True
+
+
+@app.callback(Output("upon-load", "interval"),
+              [Input("upon-load", "n_intervals"),
+               Input("connection-est", "value")])
+def load_once(_, connection):
+    if connection is True:
+        return 3.6E6
+    return 1000
+
+
+#
+# Stop Button Terminate
+@app.callback(
+    Output("stop-all", "children"),
+    [Input("start-stop", "n_clicks")]
+)
+def start_terminate(stop):
+    if stop >= 1:
+        ctrl.x.disable()
+        ctrl.y.disable()
+        ctrl.phi.disable()
+        return
+    else:
+        response = "Terminate commands and flush serial."
+        return response
 
 
 if __name__ == '__main__':
