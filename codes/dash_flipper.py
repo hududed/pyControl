@@ -302,7 +302,7 @@ root_layout = html.Div(
                                         ),
                                         html.Button(
                                             'Pattern',
-                                            id="pattern",
+                                            id="pattern-button",
                                             className="one columns",
                                             n_clicks=0,
                                             style={
@@ -333,11 +333,9 @@ root_layout = html.Div(
                         html.Div(
                             [
                                 daq.BooleanSwitch(
-                                    id='flipper-switch',
+                                    id='laser-switch',
                                     on=False,
                                 ),
-                                html.Div(
-                                    id='flipper-switch-output')
                             ], className="row"
                         ),
                     ], className='three columns'
@@ -348,12 +346,12 @@ root_layout = html.Div(
         # Placeholder Divs
         html.Div(
             [
-                html.Div(id="div-one"),
                 html.Div(id="stop-all"),
                 html.Div(id="move-x"),
                 html.Div(id="move-y"),
                 html.Div(id="move-z"),
-                # html.Div(id="div-four"),
+                html.Div(id="start-pattern"),
+                html.Div(id="laser-on"),
                 # html.Div(id="com-value"),
                 # html.Div(id="color-return"),
                 # html.Div(id="velocity-store"),
@@ -361,7 +359,6 @@ root_layout = html.Div(
             ],
             style={"visibility": "hidden"},
         ),
-        # html.Div(id='div-one'),
 
     ], className="twelve columns"
 )
@@ -390,7 +387,7 @@ app.layout = root_layout
 #     return xpos, ypos, zpos
 
 
-# Move Button
+# Move Button X
 @app.callback(
     Output("move-x", "children"),
     [Input("x-move", "n_clicks")],
@@ -405,7 +402,6 @@ def x_button(n_clicks, value):
         return
 
 
-# Move Button
 @app.callback(
     Output("move-y", "children"),
     [Input("y-move", "n_clicks")],
@@ -420,7 +416,6 @@ def y_button(n_clicks, value):
         return
 
 
-# Move Button
 @app.callback(
     Output("move-z", "children"),
     [Input("z-move", "n_clicks")],
@@ -434,11 +429,61 @@ def z_button(n_clicks, value):
     else:
         return
 
+# Pattern Button in X-direction only !
+@app.callback(
+    Output("start-pattern", "children"),
+    [Input("pattern-button", "n_clicks")],
+    [State("x-set", "value"),
+     State("vel-set", "value")]
+)
+def pattern_button(n_clicks, xval, vval):
+    if n_clicks >= 1:
+        ctrl.x.enable()
+        vel = "{}".format(vval)
+        ctrl.x.velocity = float(vel)
+
+        motor = ftd2xx.openEx(serial)
+        print(motor.getDeviceInfo())
+        motor.setBaudRate(115200)
+        motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
+        sleep(.05)
+        motor.purge()
+        sleep(.05)
+        motor.resetDevice()
+        motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
+        motor.setRts()
+        # Send raw bytes to USB driver.
+        motor.write(b"\x6A\x04\x00\x01\x21\x01")  # up or
+        motor.close()
+
+        ctrl.x.wait(500)
+        x = "{}".format(xval)
+        ctrl.x.position = float(x)
+        while not ctrl.x.motion_done:
+            sleep(.05)
+
+        motor = ftd2xx.openEx(serial)
+        motor.setBaudRate(115200)
+        motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
+        sleep(.05)
+        motor.purge()
+        sleep(.05)
+        motor.resetDevice()
+        motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
+        motor.setRts()
+        # Send raw bytes to USB driver.
+        motor.write(b"\x6A\x04\x00\x02\x21\x01")  # up or
+        motor.close()
+
+        print ('Current x-pos is : {}'.format(ctrl.x.position))
+    else:
+        return
+
 
 # ### Enable laser ###
 # @app.callback(
-#     Output('flipper-switch-output', 'children'),
-#     [Input('flipper-switch', 'on')])
+#     Output('laser-on', 'children'),
+#     [Input('laser-switch', 'on')])
 # def laser(on):
 #     """Switch 'on' or 'off'"""
 #     # Raw byte commands for "MGMSG_MOT_MOVE_JOG".
