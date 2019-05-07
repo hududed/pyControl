@@ -8,16 +8,23 @@ import ftd2xx  # Thorlabs MFF101
 import ftd2xx.defines as constants
 from time import sleep
 from pymeasure.instruments.newport import ESP300
+from pymeasure.instruments.lighthousephotonics import Sprout
 
+import visa
+
+# rm = visa.ResourceManager()
+# lighthousephotonics = rm.open_resource('ASRL1::INSTR')
+laser = Sprout('COM1')
+laser.adapter.connection.baud_rate = 19200
+laser.adapter.connection.read_termination = '\r'
+ser = b'37000805'  # flipper
+ctrl = ESP300("GPIB0::3::INSTR")  # XYZ controller
 #
-serial = b'37000805'
-ctrl = ESP300("GPIB0::3::INSTR")
-
 app = dash.Dash(__name__)
 server = app.server
 app.scripts.config.serve_locally = True
 app.config["suppress_callback_exceptions"] = True
-
+#
 # CSS Imports
 external_css = [
     "https://codepen.io/chriddyp/pen/bWLwgP.css",
@@ -429,6 +436,7 @@ def z_button(n_clicks, value):
     else:
         return
 
+
 # Pattern Button in X-direction only !
 @app.callback(
     Output("start-pattern", "children"),
@@ -441,8 +449,8 @@ def pattern_button(n_clicks, xval, vval):
         ctrl.x.enable()
         vel = "{}".format(vval)
         ctrl.x.velocity = float(vel)
-
-        motor = ftd2xx.openEx(serial)
+        # laser on
+        motor = ftd2xx.openEx(ser)
         print(motor.getDeviceInfo())
         motor.setBaudRate(115200)
         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
@@ -461,8 +469,8 @@ def pattern_button(n_clicks, xval, vval):
         ctrl.x.position = float(x)
         while not ctrl.x.motion_done:
             sleep(.05)
-
-        motor = ftd2xx.openEx(serial)
+        # laser off
+        motor = ftd2xx.openEx(ser)
         motor.setBaudRate(115200)
         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
         sleep(.05)
@@ -475,7 +483,7 @@ def pattern_button(n_clicks, xval, vval):
         motor.write(b"\x6A\x04\x00\x02\x21\x01")  # up or
         motor.close()
 
-        print ('Current x-pos is : {}'.format(ctrl.x.position))
+        print('Current x-pos is : {}'.format(ctrl.x.position))
     else:
         return
 
@@ -491,7 +499,7 @@ def pattern_button(n_clicks, xval, vval):
 #     #     off = b"\x6A\x04\x00\x02\x21\x01"  # x02 down
 #
 #     if on:
-#         motor = ftd2xx.openEx(serial)
+#         motor = ftd2xx.openEx(ser)
 #         print(motor.getDeviceInfo())
 #         motor.setBaudRate(115200)
 #         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
@@ -507,7 +515,7 @@ def pattern_button(n_clicks, xval, vval):
 #         motor.close()
 #         return 'The laser is on : {}' .format(on)
 #     else:
-#         motor = ftd2xx.openEx(serial)
+#         motor = ftd2xx.openEx(ser)
 #         print(motor.getDeviceInfo())
 #         motor.setBaudRate(115200)
 #         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
