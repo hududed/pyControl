@@ -12,13 +12,19 @@ from pymeasure.instruments.lighthousephotonics import Sprout
 
 import visa
 
-# rm = visa.ResourceManager()
-# lighthousephotonics = rm.open_resource('ASRL1::INSTR')
-laser = Sprout('COM1')
-laser.adapter.connection.baud_rate = 19200
-laser.adapter.connection.read_termination = '\r'
+
 ser = b'37000805'  # flipper
 ctrl = ESP300("GPIB0::3::INSTR")  # XYZ controller
+rm = visa.ResourceManager()
+laser = rm.open_resource("COM1")
+laser.baud_rate = 19200
+laser.read_termination = '\r'
+
+
+# laser = Sprout('COM1')
+# laser.adapter.connection.baud_rate = 19200
+# laser.adapter.connection.read_termination = '\r'
+
 #
 app = dash.Dash(__name__)
 server = app.server
@@ -340,12 +346,70 @@ root_layout = html.Div(
                         html.Div(
                             [
                                 daq.BooleanSwitch(
+                                    id='flipper-switch',
+                                    on=False,
+                                ),
+                            ], className="row"
+                        ),
+                        html.Div(
+                            [
+                                daq.BooleanSwitch(
                                     id='laser-switch',
                                     on=False,
                                 ),
                             ], className="row"
                         ),
-                    ], className='three columns'
+                        html.Div(
+                            [
+                                dcc.Input(
+                                    id="power-in",
+                                    placeholder="Enter-Power",
+                                    type="text",
+                                    value="",
+                                    className="three columns",
+                                    style={
+                                        "width": "22%",
+                                        "marginLeft": "0%",
+                                        "marginTop": "3%",
+                                    },
+                                ),
+                                html.Button(
+                                    'Set Power',
+                                    id="power-set-button",
+                                    className="two columns",
+                                    n_clicks=0,
+                                    style={
+                                        "display": "flex",
+                                        "justify-content": "center",
+                                        "align-items": "center",
+                                        "marginLeft": "1%",
+                                        "marginTop": "3%",
+                                    },
+                                ),
+                                html.Div(
+                                    [
+                                        html.Div(
+                                            "Current Power:",
+                                            style={
+                                                "marginLeft": "12%",
+                                                "marginTop": "5%"},
+                                            className="four columns"),
+                                        html.Div(
+                                            id="power-value",
+                                            className="two columns",
+                                            style={
+                                                "marginTop": "5%",
+                                                'marginRight': '20px'}),
+                                        html.Div(
+                                            "W",
+                                            className="one columns"),
+                                    ],
+                                ),
+                            ],
+                            className="row",
+                        ),
+
+                    ], className='six columns'
                 ),
 
             ],
@@ -358,7 +422,9 @@ root_layout = html.Div(
                 html.Div(id="move-y"),
                 html.Div(id="move-z"),
                 html.Div(id="start-pattern"),
+                html.Div(id="flipper-on"),
                 html.Div(id="laser-on"),
+                html.Div(id="power-set"),
                 # html.Div(id="com-value"),
                 # html.Div(id="color-return"),
                 # html.Div(id="velocity-store"),
@@ -488,11 +554,52 @@ def pattern_button(n_clicks, xval, vval):
         return
 
 
-# ### Enable laser ###
+### Switch laser on/off###
+@app.callback(
+    Output('laser-on', 'children'),
+    [Input('laser-switch', 'on')])
+def laserbutton(on):
+    if on:
+        laser.write('OPMODE=ON')
+        sleep(0.5)
+        laser.write('OPMODE=ON')
+    else:
+        laser.write('OPMODE=OFF')
+        sleep(0.5)
+        laser.write('OPMODE=OFF')
+
+# Set Laser Power
+@app.callback(
+    Output("power-set", "children"),
+    [Input("power-set-button", "n_clicks")],
+    [State("power-in", "value")]
+)
+def power_button(n_clicks, value):
+    if n_clicks >= 1:
+        x = "{}".format(value)
+        laser.write('POWER SET={}' .format(value))
+        sleep(0.5)
+        laser.write('POWER SET={}' .format(value))
+    else:
+        return
+
+### READ Laser Power ###
+@app.callback(Output("power-value", "children"),
+              [Input("stream", "n_intervals")],
+              [State("connection-est", "value")])
+def stream_power(_, connection):
+    if connection:
+        result = laser.ask('POWER?').split('=')
+        return result[1]
+    return str(0)
+
+
+
+# ### Enable laser flipper###
 # @app.callback(
-#     Output('laser-on', 'children'),
-#     [Input('laser-switch', 'on')])
-# def laser(on):
+#     Output('flipper-on', 'children'),
+#     [Input('flipper-switch', 'on')])
+# def flipper(on):
 #     """Switch 'on' or 'off'"""
 #     # Raw byte commands for "MGMSG_MOT_MOVE_JOG".
 #     #     on = b"\x6A\x04\x00\x01\x21\x01"  # x01 up
@@ -610,3 +717,4 @@ def start_terminate(stop):
 if __name__ == '__main__':
     # defaultset()
     app.run_server(port=8800, debug=True)
+    rm.close()
