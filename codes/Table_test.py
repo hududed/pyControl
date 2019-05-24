@@ -8,9 +8,10 @@ import dash_table
 import pandas as pd
 
 from time import sleep
-from pymeasure.instruments.newport import ESP300
 
-ctrl = ESP300("GPIB0::3::INSTR")  # XYZ controller
+# from pymeasure.instruments.newport import ESP300
+
+# ctrl = ESP300("GPIB0::3::INSTR")  # XYZ controller
 
 app = dash.Dash(__name__)
 server = app.server
@@ -152,7 +153,7 @@ app.layout = html.Div(
                 # html.Div(id="velocity-store"),
                 # dcc.Interval(id="velocity-interval", interval=360000, n_intervals=0),
             ],
-            style={"visibility": "hidden"},
+            # style={"visibility": "hidden"},
         ),
 
     ],
@@ -160,10 +161,11 @@ app.layout = html.Div(
 )
 
 
-def enable():
-    ctrl.x.enable()
-    ctrl.y.enable()
-    ctrl.phi.enable()
+#
+# def enable():
+#     ctrl.x.enable()
+#     ctrl.y.enable()
+#     ctrl.phi.enable()
 
 
 # # Move Button X
@@ -198,33 +200,64 @@ def enable():
 #         #          for col in columns]
 #         #     ]
 #         # enable()
-#         # x = "{}".format(value)
+#         # x = "{}".format(df.iloc[0][1])
 #         # ctrl.x.position = float(x)
+#         # y = "{}".format(df.iloc[0][2])
+#         # ctrl.x.position = float(y)
+#         # z = "{}".format(df.iloc[0][3])
+#         # ctrl.x.position = float(z)
+
+
+
 #     else:
 #         return
 
 
 @app.callback(
-    Output('table-output', 'figure'),
-    [Input('table', 'data'),
-     Input('table', 'columns')]
+    Output('run-output', 'children'),
+    [Input("run", "n_clicks")],
+    [State('table', 'data'),
+     State('table', 'columns')]
 )
-def display_output(rows, columns):
+def run_spots(n_clicks, rows, columns):
     df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
-    # print(df.iloc[0])
 
-    return {
-        'data': [
-            {
-                'type': 'parcoords',
-                'dimensions': [{
-                    'label': col['name'],
-                    'values': df[col['id']]
-                } for col in columns]
-            }
-        ]
-    }
+    if n_clicks >= 1:
+        return 'X: {}, Y: {}, Z: {}.'.format(df.iloc[0][1], df.iloc[0][2], df.iloc[0][3])
+        # [[col['name'], df[col['id']]] for col in columns]
+
+
+#         return {
+#             'data': [
+#                 {
+#                     'type': 'parcoords',
+#                     'dimensions': [{
+#                         'label': col['name'],
+#                         'values': df[col['id']]
+#                     } for col in columns]
+#                 }
+#             ]
+#         }
+# else:
+#     return
+# def display_output(rows, columns):
+#     df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
+#     # print(df.iloc[0])
+#
+#
+#
+#     return {
+#         'data': [
+#             {
+#                 'type': 'parcoords',
+#                 'dimensions': [{
+#                     'label': col['name'],
+#                     'values': df[col['id']]
+#                 } for col in columns]
+#             }
+#         ]
+#     }
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(port=7000, debug=True)
