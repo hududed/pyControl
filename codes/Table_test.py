@@ -69,59 +69,70 @@ app.layout = html.Div(
 
         html.Div(
             [
-                dash_table.DataTable(
-                    id='table',
-                    columns=(
-                            [{'id': 'Model', 'name': 'Model'}] +
-                            [{'id': p, 'name': p} for p in params]
-                    ),
-                    data=[
-                        dict(Model=i, **{param: 0 for param in params})
-                        for i in range(1, 3)
-                    ],
-                    style_cell_conditional=[
-                        {'if': {'column_id': 'Model'},
-                         'width': '100px'},
-                        {'if': {'column_id': 'x'},
-                         'width': '100px'},
-                        {'if': {'column_id': 'y'},
-                         'width': '100px'},
-                        {'if': {'column_id': 'z'},
-                         'width': '100px'},
-                    ],
-                    n_fixed_rows=1,
-                    editable=True,
+                html.Div(
+                    [
+                        html.H3("Training Set Table")
+                    ], className='Title'
                 ),
-            ], className="six columns",
-        ),
-        html.Div(
-            [
-                html.Button(
-                    'Execute',
-                    id="run",
-                    className="one columns",
-                    n_clicks=0,
+                html.Div(
+                    [
+                        dash_table.DataTable(
+                            id='table',
+                            columns=(
+                                    [{'id': 'Model', 'name': 'Model'}] +
+                                    [{'id': p, 'name': p} for p in params]
+                            ),
+                            data=[
+                                dict(Model=i, **{param: 0 for param in params})
+                                for i in range(1, 3)
+                            ],
+                            style_cell_conditional=[
+                                {'if': {'column_id': 'Model'},
+                                 'width': '100px'},
+                                {'if': {'column_id': 'x'},
+                                 'width': '100px'},
+                                {'if': {'column_id': 'y'},
+                                 'width': '100px'},
+                                {'if': {'column_id': 'z'},
+                                 'width': '100px'},
+                            ],
+                            n_fixed_rows=1,
+                            editable=True,
+                        ),
+                        html.Button(
+                            'Execute',
+                            id="run",
+                            className="two columns",
+                            n_clicks=0,
+                            style={
+                                # "float": "right",
+                                "display": "flex",
+                                "justify-content": "center",
+                                "align-items": "center",
+                                "marginLeft": "2%",
+                                "marginTop": "0%",
+                            },
+                        ),
+                    ], className='row'
+                ),
+                html.Br(),
+                html.Div(
+                    [
+                        dcc.Graph(id="table-output"),
+                    ],
+                    className='row',
                     style={
-                        # "float": "right",
                         "display": "flex",
-                        "justify-content": "center",
-                        "align-items": "center",
-                        "marginLeft": "2%",
-                        "marginTop": "0%",
-                    },
+                        # "visibility": "hidden"
+                    }
                 ),
-            ]
-        ),
-
-
-        html.Div(
-            [
-                dcc.Graph(
-                    id="table-output"
-                ),
-            ], style={
-                "display": "flex",
-                "visibility": "hidden"}
+            ],
+            className="eight columns",
+            style={
+                "border-radius": "5px",
+                "border-width": "5px",
+                "border": "1px solid rgb(216, 216, 216)",
+            },
         ),
 
         # Placeholder Divs
@@ -141,7 +152,7 @@ app.layout = html.Div(
                 # html.Div(id="velocity-store"),
                 # dcc.Interval(id="velocity-interval", interval=360000, n_intervals=0),
             ],
-            # style={"visibility": "hidden"},
+            style={"visibility": "hidden"},
         ),
 
     ],
@@ -194,12 +205,14 @@ def enable():
 
 
 @app.callback(
-    Output('table-editing-simple-output', 'figure'),
-    [Input('table-editing-simple', 'data'),
-     Input('table-editing-simple', 'columns')])
+    Output('table-output', 'figure'),
+    [Input('table', 'data'),
+     Input('table', 'columns')]
+)
 def display_output(rows, columns):
     df = pd.DataFrame(rows, columns=[c['name'] for c in columns])
     # print(df.iloc[0])
+
     return {
         'data': [
             {
