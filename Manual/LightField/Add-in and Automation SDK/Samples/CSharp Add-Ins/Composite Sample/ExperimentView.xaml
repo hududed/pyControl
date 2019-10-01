@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="LightFieldAddInSamples.Composite_Sample.ExperimentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="341" d:DesignWidth="806">    
+    <Grid Height="337" Width="806">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+        <!-- row 0 -->
+        <Label Grid.Row="0" Content="Visibility" Height="28" HorizontalAlignment="Left" Margin="117,0,0,0" Name="label1" VerticalAlignment="Center" />
+        <Label Grid.Row="0" Content="Initial State" Height="28" HorizontalAlignment="Left" Margin="173,0,0,0" Name="label3" VerticalAlignment="Center" />
+        <Label Grid.Row="0" Content="Execute" Height="28" HorizontalAlignment="Left" Margin="254,0,0,0" Name="label4" VerticalAlignment="Center" />
+        <Label Grid.Row="0" Content="Title" Height="28" HorizontalAlignment="Left" Margin="331,0,0,0" Name="label6" VerticalAlignment="Center" />
+        <Label Grid.Row="0" Content="Tool Tip" Height="28" HorizontalAlignment="Left" Margin="467,0,0,0" Name="label5" VerticalAlignment="Center" />        
+        <!-- row 1-->
+        <Label Grid.Row="1" Content="Menu" Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label2" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="1" Height="16" HorizontalAlignment="Left" Margin="135,0,0,0" Name="MenuVis" VerticalAlignment="Center" />
+        <ComboBox Grid.Row="1" Height="23" HorizontalAlignment="Left" Margin="173,0,0,0" Name="MenuToggle" VerticalAlignment="Center" Width="70" SelectedIndex="0">
+            <ComboBoxItem>TRUE</ComboBoxItem>
+            <ComboBoxItem>FALSE</ComboBoxItem>
+            <ComboBoxItem>NULL</ComboBoxItem>
+        </ComboBox>
+        <CheckBox Grid.Row="1" Height="16" HorizontalAlignment="Left" Margin="270,0,0,0" Name="MenuExec" VerticalAlignment="Center" />
+        <TextBox Grid.Row="1" Text="MenuItem" Height="23" HorizontalAlignment="Left" Margin="331,0,0,0" Name="MenuTitle" VerticalAlignment="Center" Width="120" />
+        <TextBox Grid.Row="1" Text="" Height="23" HorizontalAlignment="Left" Margin="475,0,0,0" Name="MenuTip" VerticalAlignment="Center" Width="249" Visibility="Hidden" />
+        <!-- row 2-->
+        <Label Grid.Row="2" Content="App ToolBar" Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label7" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="136,0,0,0" Name="AppVis" VerticalAlignment="Center" />
+        <ComboBox Grid.Row="2" Height="23" HorizontalAlignment="Left" Margin="173,0,0,0" Name="AppToggle" VerticalAlignment="Center" Width="70" SelectedIndex="0">
+            <ComboBoxItem Content="TRUE" />
+            <ComboBoxItem Content="FALSE" />
+            <ComboBoxItem Content="NULL" />
+        </ComboBox>
+        <CheckBox Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="271,0,0,0" Name="AppExec" VerticalAlignment="Center" />
+        <TextBox Grid.Row="2" Text="AppToolBarItem" Height="23" HorizontalAlignment="Left" Margin="331,0,0,0" Name="AppTitle" VerticalAlignment="Center" Width="120" />
+        <TextBox Grid.Row="2" Text="This is the application toolbar tip." Height="23" HorizontalAlignment="Left" Margin="475,0,0,0" Name="AppTip" VerticalAlignment="Center" Width="249" />
+        <!-- row 3 -->
+        <Label Grid.Row="3" Content="Data Tool Bar" Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label8" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="3" Height="16" HorizontalAlignment="Left" Margin="136,0,0,0" Name="DataVis" VerticalAlignment="Center" />
+        <ComboBox Grid.Row="3" Height="23" HorizontalAlignment="Left" Margin="173,0,0,0" Name="DataToggle" VerticalAlignment="Center" Width="70" SelectedIndex="0">
+            <ComboBoxItem Content="TRUE" />
+            <ComboBoxItem Content="FALSE" />
+            <ComboBoxItem Content="NULL" />
+        </ComboBox>
+        <CheckBox Grid.Row="3" Height="16" HorizontalAlignment="Left" Margin="271,0,0,0" Name="DataExec" VerticalAlignment="Center" />
+        <TextBox Grid.Row="3" Text="DataToolBarItem" Height="23" HorizontalAlignment="Left" Margin="331,0,0,0" Name="DataTitle" VerticalAlignment="Center" Width="120" />
+        <TextBox Grid.Row="3" Text="This is the data toolbar tip." Height="23" HorizontalAlignment="Left" Margin="475,0,0,0" Name="DataTip" VerticalAlignment="Center" Width="249" />
+        <!-- row 4-->
+        <Label Grid.Row="4" Content="Experiment Setting" Height="28" HorizontalAlignment="Left" Margin="12,0,0,0" Name="label9" VerticalAlignment="Center" />
+        <CheckBox Grid.Row="4" Height="16" HorizontalAlignment="Left" Margin="137,0,0,0" Name="ExpVis" VerticalAlignment="Center" />
+        <ComboBox Grid.Row="4" Height="23" HorizontalAlignment="Left" Margin="173,0,0,0" Name="ExpToggle" VerticalAlignment="Center" Width="70" SelectedIndex="0" Visibility="Hidden">
+            <ComboBoxItem Content="TRUE" />
+            <ComboBoxItem Content="FALSE" />
+            <ComboBoxItem Content="NULL" />
+        </ComboBox>
+        <CheckBox Grid.Row="4" Height="16" HorizontalAlignment="Left" Margin="272,0,0,0" Name="ExpExec" VerticalAlignment="Center" Visibility="Hidden" />
+        <TextBox Grid.Row="4" Text="ExperimentItem" Height="23" HorizontalAlignment="Left" Margin="331,0,0,0" Name="ExpTitle" VerticalAlignment="Center" Width="120" />
+        <TextBox Grid.Row="4" Height="23" HorizontalAlignment="Left" Margin="475,0,0,0" Name="ExpTip" VerticalAlignment="Center" Width="249" Visibility="Hidden" />
+        <!-- row 5-->
+        <Button Grid.Row="5" Content="Update" Height="32" HorizontalAlignment="Left" Margin="173,0,0,0" Name="UpdateButton" VerticalAlignment="Center" Width="394" Click="UpdateButton_Click" />
+    </Grid>
+</UserControl>

@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{C47B81EB-EE07-488A-A645-0CC8C31D678C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LightFieldCSharpAddInSamples</RootNamespace>
+    <AssemblyName>LightFieldCSharpAddInSamples</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName Condition=" '$(LIGHTFIELD_ROOT)' == '' ">LightFieldCSharpAddInSamples</SccProjectName>
+    <SccLocalPath Condition=" '$(LIGHTFIELD_ROOT)' == '' ">6~95d6451b-849f-43ee-81f6-5874183217a0</SccLocalPath>
+    <SccAuxPath Condition=" '$(LIGHTFIELD_ROOT)' == '' ">https://vault.piacton.com/VaultService</SccAuxPath>
+    <SccProvider Condition=" '$(LIGHTFIELD_ROOT)' == '' ">SourceGear Vault Visual Studio 2005 Client:{7BE9CE03-56BF-4682-9C06-78C68B134B30}</SccProvider>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <LightFieldRoot>$(LIGHTFIELD_ROOT)</LightFieldRoot>
+    <LightFieldRoot Condition=" '$(LIGHTFIELD_ROOT)' == '' ">$(SolutionDir)bin\$(SolutionName)\$(Platform)\$(Configuration)</LightFieldRoot>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>$(LightFieldRoot)\AddIns\$(AssemblyName)\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>$(LightFieldRoot)\AddIns\$(AssemblyName)\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PrincetonInstruments.LightFieldAddInSupportServices, Version=1.0.3.0, Culture=neutral, PublicKeyToken=b4264bead66a4a36, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>$(LightFieldRoot)\PrincetonInstruments.LightFieldAddInSupportServices.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.AddIn">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.AddIn.Contract" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Acquire Async Sample\AcquireAsyncSample.cs" />
+    <Compile Include="Acquire Async Sample\AsynAcquireSample.xaml.cs">
+      <DependentUpon>AsynAcquireSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Acquire Sync Sample\AcquireSyncSample.cs" />
+    <Compile Include="Acquire Sync Sample\AcquireSyncSample.xaml.cs">
+      <DependentUpon>AcquireSyncSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Composite Sample\CompositeSample.cs" />
+    <Compile Include="Composite Sample\ExperimentView.xaml.cs">
+      <DependentUpon>ExperimentView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Control Gallery Sample\ControlGallerySample.cs" />
+    <Compile Include="Control Gallery Sample\ControlGallerySample.xaml.cs">
+      <DependentUpon>ControlGallerySample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Custom Acquire Sample\CustomAcquireSample.cs" />
+    <Compile Include="Data Sample\DataSample.cs" />
+    <Compile Include="Dialog Sample\DialogSample.cs" />
+    <Compile Include="Dialog Sample\DialogSampleWindow.xaml.cs">
+      <DependentUpon>DialogSampleWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display Controls Sample\DisplayControlsSample.cs" />
+    <Compile Include="Display Controls Sample\DisplayControlsSample.xaml.cs">
+      <DependentUpon>DisplayControlsSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Display Controls Sample\DisplayControlsWidgets.cs" />
+    <Compile Include="Export Sample\ExportSample.cs" />
+    <Compile Include="Export Sample\ExportSample.xaml.cs">
+      <DependentUpon>ExportSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="File Sample\FileSample.cs" />
+    <Compile Include="Metadata Sample\MetadataSample.cs" />
+    <Compile Include="Metadata Sample\MetadataSample.xaml.cs">
+      <DependentUpon>MetadataSample.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Online Sobel Sample\OnlineSobelSample.cs" />
+    <Compile Include="Plot Sample\PlotSample.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Regions Of Interest Sample\RegionControl.xaml.cs">
+      <DependentUpon>RegionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Regions Of Interest Sample\RegionOfInterestSample.cs" />
+    <Compile Include="Setting Snoop Sample\SettingSnoopSample.cs" />
+    <Compile Include="Spectroscopy Sample\SpectroscopySample.cs" />
+    <Compile Include="System Building Sample\SystemBuildingSample.cs" />
+    <Compile Include="System Building Sample\SystemBuildingSampleControl.xaml.cs">
+      <DependentUpon>SystemBuildingSampleControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Viewer Sample\ViewerSample.cs" />
+    <Compile Include="Viewer Sample\ViewerSample.xaml.cs">
+      <DependentUpon>ViewerSample.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Acquire Async Sample\AsynAcquireSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Acquire Sync Sample\AcquireSyncSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Composite Sample\ExperimentView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control Gallery Sample\ControlGallerySample.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Dialog Sample\DialogSampleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Display Controls Sample\DisplayControlsSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Export Sample\ExportSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Metadata Sample\MetadataSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Regions Of Interest Sample\RegionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="System Building Sample\SystemBuildingSampleControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Viewer Sample\ViewerSample.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Plot Sample\PlotSample.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="PrincetonInstruments.LightFieldViewV5">
+      <HintPath>$(LightFieldRoot)\AddInViews\PrincetonInstruments.LightFieldViewV5.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

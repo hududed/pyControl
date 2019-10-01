@@ -1,0 +1,172 @@
+﻿<UserControl x:Class="GalleryControlSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="600" Width="800">
+    <Grid>
+        <Button Height="23" HorizontalAlignment="Left" Margin="43,56,0,0" Name="button1" VerticalAlignment="Top" Width="120" Click="button1_Click">Button</Button>
+        <CheckBox Height="16" HorizontalAlignment="Left" Margin="43,85,0,0" Name="checkBox1" VerticalAlignment="Top" Width="120">CheckBox</CheckBox>
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="43,107,0,0" Name="comboBox" VerticalAlignment="Top" Width="120" />
+        <Menu Height="22" Margin="12,4,12,0" Name="menu1" VerticalAlignment="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Open"/>
+                <MenuItem Header="Close"/>
+                <Separator/>
+                <MenuItem Header="Add"/>
+            </MenuItem>
+            <MenuItem Header="Edit">
+                <MenuItem Header="Redo"/>
+                <MenuItem Header="Undo"/>
+            </MenuItem>
+            <MenuItem Header="View">
+                <MenuItem Header="Code"/>
+                <MenuItem Header="Designer"/>
+                <Separator/>
+                <MenuItem Header="Other Windows">
+                    <MenuItem Header="Output">
+                        <MenuItem Header="Bookmarks"/>
+                        <MenuItem Header="Find Results"/>
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <ProgressBar Height="21" Margin="173,85,0,0" Name="progressBar1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="146" />
+        <RadioButton Height="16" HorizontalAlignment="Left" Margin="43,168,0,0" Name="radioButton1" VerticalAlignment="Top" Width="120">RadioButton</RadioButton>
+        <Slider Height="22" Margin="629,169,0,0" Name="slider1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="120" />
+        <ListBox Margin="174,112,0,0" Name="listBox" Height="100" VerticalAlignment="Top" HorizontalAlignment="Left" Width="145" />
+        <ToolBarTray Margin="18,0,331,187" Name="toolBarTray1" Height="97" VerticalAlignment="Bottom">
+            <ToolBar Height="26" HorizontalAlignment="Left" Name="toolBar1" VerticalAlignment="Top" BandIndex="1" Band="1">
+                <Button>Push Me 1</Button>
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem>Item #1</ComboBoxItem>
+                    <ComboBoxItem>Item #2</ComboBoxItem>
+                    <ComboBoxItem>Item #3</ComboBoxItem>
+                </ComboBox>
+                <ToggleButton Content="Check Me 1"></ToggleButton>
+            </ToolBar>
+            <ToolBar Height="26" HorizontalAlignment="Left" Name="toolBar2" VerticalAlignment="Top" BandIndex="2" Band="2">
+                <Button>Push Me 1</Button>
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem>Item #1</ComboBoxItem>
+                    <ComboBoxItem>Item #2</ComboBoxItem>
+                    <ComboBoxItem>Item #3</ComboBoxItem>
+                </ComboBox>
+                <ToggleButton Content="Check Me 1"></ToggleButton>
+            </ToolBar>
+            <ToolBar Height="26" HorizontalAlignment="Left" Name="toolBar3" VerticalAlignment="Top" BandIndex="3" Band="3">
+                <Button>Push Me 1</Button>
+                <ComboBox SelectedIndex="0">
+                    <ComboBoxItem>Item #1</ComboBoxItem>
+                    <ComboBoxItem>Item #2</ComboBoxItem>
+                    <ComboBoxItem>Item #3</ComboBoxItem>
+                </ComboBox>
+                <ToggleButton Content="Check Me 1"></ToggleButton>
+            </ToolBar>
+        </ToolBarTray>
+        <StatusBar Height="23" Margin="12,0,12,9" Name="statusBar1" VerticalAlignment="Bottom">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock>Ready</TextBlock>
+            </StatusBarItem>
+            <Separator Grid.Column="1" Width="20">
+            </Separator>
+            <StatusBarItem Grid.Column="2">
+                <TextBlock>Set</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3">
+                <TextBlock>Go!</TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        <ProgressBar Height="21" Margin="173,58,0,0" Name="progressBar2" VerticalAlignment="Top" HorizontalAlignment="Left" Width="146" />
+        <Label Height="28" HorizontalAlignment="Left" Margin="169,229,0,0" Name="label1" VerticalAlignment="Top" Width="63" Target="{Binding ElementName=textBox1}">Label</Label>
+        <TextBlock HorizontalAlignment="Left" Margin="172,263,0,0" Name="textBlock1" Width="120" Text="TextBlock" Height="21" VerticalAlignment="Top" />
+        <TextBox Height="23" Margin="228,231,0,0" Name="textBox1" VerticalAlignment="Top" HorizontalAlignment="Left" Width="91">TextBox</TextBox>
+        <StackPanel Height="136" VerticalAlignment="Bottom" Margin="12,0,12,41">
+            <ListView ItemsSource="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}},Path=BookCollection}">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Width="140" Header="Book" DisplayMemberBinding="{Binding Book}"  />
+                        <GridViewColumn Width="140" Header="Author" DisplayMemberBinding="{Binding Author}" />
+                        <GridViewColumn Width="140" Header="Year" DisplayMemberBinding="{Binding Year}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <Button HorizontalAlignment="Right" Margin="5,5,5,5" 
+       Content="Add Row" Click="AddRow_Click" />
+        </StackPanel>
+
+        <TreeView HorizontalAlignment="Right" Margin="0,0,12,189" Name="treeView1" Width="303" Height="95" VerticalAlignment="Bottom">
+            <TreeViewItem Header="Cold Drinks">
+                <TreeViewItem Header="Coke"></TreeViewItem>
+                <TreeViewItem Header="Pepsi"></TreeViewItem>
+                <TreeViewItem Header="Orange Juice"></TreeViewItem>
+                <TreeViewItem Header="Milk"></TreeViewItem>
+                <TreeViewItem Header="Iced Tea"></TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Header="Hot Drinks">
+                <TreeViewItem Header="Coffee"></TreeViewItem>
+                <TreeViewItem Header="Tea"></TreeViewItem>
+                <TreeViewItem Header="Hot Chocolate"></TreeViewItem>
+                <TreeViewItem Header="Espresso"></TreeViewItem>
+            </TreeViewItem>
+            <TreeViewItem Header="Deadly Drinks">
+                <TreeViewItem Header="Antifreeze"></TreeViewItem>
+                <TreeViewItem Header="Kerosene"></TreeViewItem>
+                <TreeViewItem Header="Bleach"></TreeViewItem>
+            </TreeViewItem>
+        </TreeView>
+        <Grid Margin="349,46.96,51,0" Height="100
+          " VerticalAlignment="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"></ColumnDefinition>
+                <ColumnDefinition Width="3"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Button Margin="20,20,20,20">Left Button</Button>
+            </Grid>
+            <GridSplitter Grid.Column="1" Grid.Row="0" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <Grid Grid.Column="2"  >
+                <Button Margin="20,20,20,20" >Right Button</Button>
+            </Grid>
+        </Grid>
+        <GroupBox Header="Basic Controls" HorizontalAlignment="Left" Margin="12,30,0,298" Name="groupBox1" Width="331">
+            <Grid>
+                <ComboBox Height="23" IsEditable="True" HorizontalAlignment="Left" Margin="25,89,0,0" Name="comboBox1" VerticalAlignment="Top" Width="120">
+                    <ComboBoxItem>Thurstan</ComboBoxItem>
+                    <ComboBoxItem>Gilligan</ComboBoxItem>
+                    <ComboBoxItem>Skipper</ComboBoxItem>
+                    <ComboBoxItem>Ginger</ComboBoxItem>
+                    <ComboBoxItem>Professor</ComboBoxItem>
+                </ComboBox>
+                <Expander Header="expander1" HorizontalAlignment="Left" Margin="19,151,0,0" Name="expander1" Width="126" Height="92" VerticalAlignment="Top">
+                    <Grid />
+                </Expander>
+            </Grid>
+        </GroupBox>
+        <TabControl Height="145" HorizontalAlignment="Left" Margin="349,157,0,0" Name="tabControl1" VerticalAlignment="Top" Width="259">
+            <TabItem Header="Tab #1" Name="tabItem1"></TabItem>
+            <TabItem Header="Tab #2" Name="tabItem2"></TabItem>
+            <TabItem Header="Tab #3" Name="tabItem"></TabItem>
+        </TabControl>
+        <Slider Height="22" Minimum="0" Maximum="100" HorizontalAlignment="Left" Margin="629,198,0,0" Name="slider2" VerticalAlignment="Top" Width="120" TickPlacement="TopLeft" TickFrequency="10" />
+        <Slider Height="255" Minimum="0" Maximum="100" HorizontalAlignment="Left" Margin="761,47,0,0" Name="slider3" VerticalAlignment="Top" Width="22" Orientation="Vertical" TickFrequency="10" TickPlacement="TopLeft" />
+        <RichTextBox Height="77" HorizontalAlignment="Left" Margin="620,225,0,0" Name="richTextBox1" VerticalAlignment="Top" Width="129" />
+    </Grid>
+</UserControl>

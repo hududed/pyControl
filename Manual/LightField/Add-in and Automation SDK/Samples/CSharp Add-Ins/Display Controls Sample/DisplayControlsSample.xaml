@@ -1,0 +1,28 @@
+﻿<Window x:Class="LightFieldAddInSamples.DisplayControlsSample"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="435" Width="546" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Grid>
+        <DockPanel Margin="175,12,0,55" Name="dockPanel1" HorizontalAlignment="Left" Width="337" />       
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="12,88,0,0" Name="LocationCombo" VerticalAlignment="Top" Width="148" SelectionChanged="LocationCombo_SelectionChanged">
+            <ComboBoxItem>Experiment Workspace</ComboBoxItem>            
+            <ComboBoxItem>Data Workspace</ComboBoxItem>
+        </ComboBox> 
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="12,39,0,0" Name="IndexCombo" VerticalAlignment="Top" Width="148" SelectionChanged="IndexCombo_SelectionChanged">  
+            <ComboBoxItem>1</ComboBoxItem>
+            <ComboBoxItem>2</ComboBoxItem>
+            <ComboBoxItem>3</ComboBoxItem>
+            <ComboBoxItem>4</ComboBoxItem>
+            <ComboBoxItem>5</ComboBoxItem>
+        </ComboBox>
+        <Button Content="Done" Height="23" HorizontalAlignment="Left" Margin="437,361,0,0" Name="DoneButton" VerticalAlignment="Top" Width="75" IsDefault="True" Click="DoneButton_Click" />
+        <ComboBox Height="23" HorizontalAlignment="Left" Margin="12,140,0,0" Name="LayoutCombo" VerticalAlignment="Top" Width="148" SelectionChanged="LayoutCombo_SelectionChanged">          
+        </ComboBox>
+        <Label Content="Select View#:" HorizontalAlignment="Left" Margin="12,17,0,351" Name="label1" />
+        <Label Content="Select Workspace:" Height="28" HorizontalAlignment="Left" Margin="12,67,0,0" Name="label2" VerticalAlignment="Top" />
+        <Label Content="Select Layout:" Height="28" HorizontalAlignment="Left" Margin="12,119,0,0" Name="label3" VerticalAlignment="Top" />
+        <Button Content="Load File To Selected" Height="23" HorizontalAlignment="Left" Margin="12,214,0,0" Name="LoadFileButton" VerticalAlignment="Top" Width="148" Click="LoadFileButton_Click" />
+        <Button Height="23" Margin="12,185,0,0" Name="DisplayButton" VerticalAlignment="Top" Click="DisplayButton_Click" HorizontalAlignment="Left" Width="148">Get Controls For Selected</Button>
+        <Button Content="Add File To Selected" Height="23" HorizontalAlignment="Left" Margin="12,243,0,0" Name="AddFileButton" VerticalAlignment="Top" Width="148" Click="AddFileButton_Click" />
+    </Grid>
+</Window>

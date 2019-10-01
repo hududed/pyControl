@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="LightFieldAddInSamples.Regions_Of_Interest_Sample.RegionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="391" d:DesignWidth="314">
+    <Grid>
+        <RadioButton Height="16" Margin="24,34,0,0" Name="FullChip" VerticalAlignment="Top" Checked="radioButton1_Checked" HorizontalAlignment="Left" Width="194" IsChecked="False">Full Chip</RadioButton>
+        <RadioButton Height="16" Margin="24,61,0,0" Name="FullSensorBinned" VerticalAlignment="Top" Checked="FullSensorBinned_Checked" HorizontalAlignment="Left" Width="194">Full Sensor, Binned</RadioButton>
+        <RadioButton Height="16" Margin="24,148,0,0" Name="RowsBinned" VerticalAlignment="Top" Checked="RowsBinned_Checked" HorizontalAlignment="Left" Width="194">Rows Binned</RadioButton>
+        <RadioButton Height="16" Margin="24,205,0,0" Name="CustomRegion" VerticalAlignment="Top" Checked="CustomRegion_Checked" HorizontalAlignment="Left" Width="194">Region(s) of Interest</RadioButton>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="103,83,0,0" Name="FullSensorBinW" VerticalAlignment="Top" Width="42" TextChanged="FullSensorBinW_TextChanged" />
+        <Label Height="25" HorizontalAlignment="Left" Margin="54,86,0,0" Name="textBlock1" VerticalAlignment="Top" Width="43">Bin Width</Label> 
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="103,114,0,0" Name="FullSensorBinH" VerticalAlignment="Top" Width="42" TextChanged="FullSensorBinH_TextChanged" />
+        <Label Height="25" HorizontalAlignment="Left" Margin="54,117,0,0" Name="textBlock2" VerticalAlignment="Top" Width="43">Bin Height</Label> 
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="103,170,0,0" Name="RowsBinnedH" VerticalAlignment="Top" Width="42" TextChanged="RowsBinnedH_TextChanged" />
+        <Label Height="26" HorizontalAlignment="Left" Margin="54,173,0,0" Name="textBlock3"  VerticalAlignment="Top" Width="43">Bin Height</Label>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="91,235,0,0" Name="RegionX" VerticalAlignment="Top" Width="58" TextChanged="RegionX_TextChanged" />
+        <Label Height="29" HorizontalAlignment="Left" Margin="46,238,0,0" Name="textBlock4"  VerticalAlignment="Top" Width="36">X</Label>
+        <TextBox Height="23" Margin="210,234,0,0" Name="RegionY" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54" TextChanged="RegionY_TextChanged" />
+        <Label Height="30" Margin="158,237,0,0" Name="textBlock5"  VerticalAlignment="Top" HorizontalAlignment="Left" Width="36">Y</Label>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="91,270,0,0" Name="RegionWidth" VerticalAlignment="Top" Width="58" TextChanged="RegionWidth_TextChanged" />
+        <Label Height="27" HorizontalAlignment="Left" Margin="46,273,0,0" Name="textBlock6" VerticalAlignment="Top" Width="51">Width</Label>
+        <TextBox Height="23" Margin="210,269,0,0" Name="RegionHeight" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54" TextChanged="RegionHeight_TextChanged" />
+        <Label Height="28" Margin="158,272,0,0" Name="textBlock7" VerticalAlignment="Top" HorizontalAlignment="Left" Width="46">Height</Label>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="91,303,0,0" Name="XBin" VerticalAlignment="Top" Width="58" TextChanged="XBin_TextChanged" />
+        <Label Height="30" HorizontalAlignment="Left" Margin="46,306,0,0" Name="textBlock8" VerticalAlignment="Top" Width="36">X Bin</Label>
+        <TextBox Height="23" Margin="210,302,0,0" Name="YBin" VerticalAlignment="Top" HorizontalAlignment="Left" Width="54" TextChanged="YBin_TextChanged" />
+        <Label Height="31" Margin="158,305,0,0" Name="textBlock9" VerticalAlignment="Top" HorizontalAlignment="Left" Width="43">Y Bin</Label>
+        <Button Height="23" Margin="8,341,0,0" Name="button1" VerticalAlignment="Top" Click="button1_Click" HorizontalAlignment="Left" Width="286">Acquire</Button>
+    </Grid>
+</UserControl>

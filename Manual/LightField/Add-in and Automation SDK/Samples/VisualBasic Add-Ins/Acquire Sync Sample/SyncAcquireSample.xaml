@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="SyncAcquireSample"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="55" d:DesignWidth="255">
+    <Grid>
+        <Button Content="Acquire Synchronous" Height="23" HorizontalAlignment="Center" Margin="10" Name="button1" VerticalAlignment="Top" Width="176" Click="AcquireSync_Click" />
+    </Grid>
+</UserControl>
