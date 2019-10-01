@@ -6,26 +6,29 @@ from dash.dependencies import Input, Output, State
 
 import ftd2xx  # Thorlabs MFF101
 import ftd2xx.defines as constants
+
 from time import sleep
+
 from pymeasure.instruments.newport import ESP300
 from pymeasure.instruments.lighthousephotonics import Sprout
 
 import visa
 
+visa.log_to_screen()
 
 ser = b'37000805'  # flipper
 ctrl = ESP300("GPIB0::3::INSTR")  # XYZ controller
 rm = visa.ResourceManager()
-laser = rm.open_resource("COM1")
-laser.baud_rate = 19200
-laser.read_termination = '\r'
+
+# laser = rm.open_resource("COM1")
+# laser.baud_rate = 19200
+# laser.read_termination = '\r'
 
 
 # laser = Sprout('COM1')
 # laser.adapter.connection.baud_rate = 19200
 # laser.adapter.connection.read_termination = '\r'
 
-#
 app = dash.Dash(__name__)
 server = app.server
 app.scripts.config.serve_locally = True
@@ -155,55 +158,6 @@ root_layout = html.Div(
                                 html.Div(
                                     [
                                         dcc.Input(
-                                            id="x-set",
-                                            placeholder="x-position",
-                                            type="text",
-                                            value="",
-                                            className="three columns",
-                                            style={
-                                                "width": "22%",
-                                                "marginLeft": "0%",
-                                                "marginTop": "3%",
-                                            },
-                                        ),
-                                        html.Button(
-                                            'Move X',
-                                            id="x-move",
-                                            className="one columns",
-                                            n_clicks=0,
-                                            style={
-                                                "display": "flex",
-                                                "justify-content": "center",
-                                                "align-items": "center",
-                                                "marginLeft": "1%",
-                                                "marginTop": "3%",
-                                            },
-                                        ),
-                                        html.Div(
-                                            [
-                                                html.Div(
-                                                    "Actual X:",
-                                                    style={
-                                                        "marginLeft": "12%",
-                                                        "marginTop": "5%"},
-                                                    className="three columns"),
-                                                html.Div(
-                                                    id="x-value",
-                                                    className="two columns",
-                                                    style={
-                                                        "marginTop": "5%",
-                                                        'marginRight': '20px'}),
-                                                html.Div(
-                                                    "mm",
-                                                    className="one columns"),
-                                            ],
-                                        ),
-                                    ],
-                                    className="row",
-                                ),
-                                html.Div(
-                                    [
-                                        dcc.Input(
                                             id="y-set",
                                             placeholder="y-position",
                                             type="text",
@@ -238,6 +192,55 @@ root_layout = html.Div(
                                                     className="three columns"),
                                                 html.Div(
                                                     id="y-value",
+                                                    className="two columns",
+                                                    style={
+                                                        "marginTop": "5%",
+                                                        'marginRight': '20px'}),
+                                                html.Div(
+                                                    "mm",
+                                                    className="one columns"),
+                                            ],
+                                        ),
+                                    ],
+                                    className="row",
+                                ),
+                                html.Div(
+                                    [
+                                        dcc.Input(
+                                            id="x-set",
+                                            placeholder="x-position",
+                                            type="text",
+                                            value="",
+                                            className="three columns",
+                                            style={
+                                                "width": "22%",
+                                                "marginLeft": "0%",
+                                                "marginTop": "3%",
+                                            },
+                                        ),
+                                        html.Button(
+                                            'Move X',
+                                            id="x-move",
+                                            className="one columns",
+                                            n_clicks=0,
+                                            style={
+                                                "display": "flex",
+                                                "justify-content": "center",
+                                                "align-items": "center",
+                                                "marginLeft": "1%",
+                                                "marginTop": "3%",
+                                            },
+                                        ),
+                                        html.Div(
+                                            [
+                                                html.Div(
+                                                    "Actual X:",
+                                                    style={
+                                                        "marginLeft": "12%",
+                                                        "marginTop": "5%"},
+                                                    className="three columns"),
+                                                html.Div(
+                                                    id="x-value",
                                                     className="two columns",
                                                     style={
                                                         "marginTop": "5%",
@@ -348,7 +351,14 @@ root_layout = html.Div(
                                 daq.BooleanSwitch(
                                     id='flipper-switch',
                                     on=False,
+                                    className="two columns",
                                 ),
+                                html.Div(
+                                    "Flip ON/OFF",
+                                    style={
+                                        "marginLeft": "0%",
+                                        "marginTop": "0%"},
+                                    className="three columns"),
                             ], className="row"
                         ),
                         html.Div(
@@ -356,7 +366,14 @@ root_layout = html.Div(
                                 daq.BooleanSwitch(
                                     id='laser-switch',
                                     on=False,
+                                    className="two columns",
                                 ),
+                                html.Div(
+                                    "Laser ON/OFF",
+                                    style={
+                                        "marginLeft": "0%",
+                                        "marginTop": "0%"},
+                                    className="three columns"),
                             ], className="row"
                         ),
                         html.Div(
@@ -406,7 +423,7 @@ root_layout = html.Div(
                                     ],
                                 ),
                             ],
-                            className="row",
+                            # className="row",
                         ),
 
                     ], className='six columns'
@@ -414,6 +431,32 @@ root_layout = html.Div(
 
             ],
         ),
+        html.Div(
+            [
+                html.Div(
+                    [
+                        html.H3("Auto-Training")
+                    ], className='Title'
+                ),
+                dcc.Textarea(
+                    id="training-input",
+                    placeholder="Enter training parameters",
+                    value="",
+                    style={"width": "500%", "height": "500%"},
+                    className='eleven columns',
+                    cols=6,
+                    rows=15,
+                    contentEditable=True,
+                )
+            ],
+            style={
+                "float": "left",
+                "display": "flex",
+                "justify-content": "center",
+                "align-items": "center",
+            },
+        ),
+
         # Placeholder Divs
         html.Div(
             [
@@ -530,7 +573,7 @@ def pattern_button(n_clicks, xval, vval):
         motor.write(b"\x6A\x04\x00\x01\x21\x01")  # up or
         motor.close()
 
-        ctrl.x.wait(500)
+        sleep(0.5)
         x = "{}".format(xval)
         ctrl.x.position = float(x)
         while not ctrl.x.motion_done:
@@ -554,89 +597,90 @@ def pattern_button(n_clicks, xval, vval):
         return
 
 
-### Switch laser on/off###
-@app.callback(
-    Output('laser-on', 'children'),
-    [Input('laser-switch', 'on')])
-def laserbutton(on):
-    if on:
-        laser.write('OPMODE=ON')
-        sleep(0.5)
-        laser.write('OPMODE=ON')
-    else:
-        laser.write('OPMODE=OFF')
-        sleep(0.5)
-        laser.write('OPMODE=OFF')
-
-# Set Laser Power
-@app.callback(
-    Output("power-set", "children"),
-    [Input("power-set-button", "n_clicks")],
-    [State("power-in", "value")]
-)
-def power_button(n_clicks, value):
-    if n_clicks >= 1:
-        x = "{}".format(value)
-        laser.write('POWER SET={}' .format(value))
-        sleep(0.5)
-        laser.write('POWER SET={}' .format(value))
-    else:
-        return
-
-### READ Laser Power ###
-@app.callback(Output("power-value", "children"),
-              [Input("stream", "n_intervals")],
-              [State("connection-est", "value")])
-def stream_power(_, connection):
-    if connection:
-        result = laser.ask('POWER?').split('=')
-        return result[1]
-    return str(0)
-
-
-
-# ### Enable laser flipper###
+# ### Switch laser on/off###
 # @app.callback(
-#     Output('flipper-on', 'children'),
-#     [Input('flipper-switch', 'on')])
-# def flipper(on):
-#     """Switch 'on' or 'off'"""
-#     # Raw byte commands for "MGMSG_MOT_MOVE_JOG".
-#     #     on = b"\x6A\x04\x00\x01\x21\x01"  # x01 up
-#     #     off = b"\x6A\x04\x00\x02\x21\x01"  # x02 down
-#
+#     Output('laser-on', 'children'),
+#     [Input('laser-switch', 'on')])
+# def laserbutton(on):
 #     if on:
-#         motor = ftd2xx.openEx(ser)
-#         print(motor.getDeviceInfo())
-#         motor.setBaudRate(115200)
-#         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
-#         sleep(.05)
-#         motor.purge()
-#         sleep(.05)
-#         motor.resetDevice()
-#         motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
-#         motor.setRts()
-#
-#         # Send raw bytes to USB driver.
-#         motor.write(b"\x6A\x04\x00\x01\x21\x01")  # up or
-#         motor.close()
-#         return 'The laser is on : {}' .format(on)
+#         laser.write('OPMODE=ON')
+#         sleep(0.5)
+#         laser.write('OPMODE=ON')
 #     else:
-#         motor = ftd2xx.openEx(ser)
-#         print(motor.getDeviceInfo())
-#         motor.setBaudRate(115200)
-#         motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
-#         sleep(.05)
-#         motor.purge()
-#         sleep(.05)
-#         motor.resetDevice()
-#         motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
-#         motor.setRts()
+#         laser.write('OPMODE=OFF')
+#         sleep(0.5)
+#         laser.write('OPMODE=OFF')
 #
-#         # Send raw bytes to USB driver.
-#         motor.write(b"\x6A\x04\x00\x02\x21\x01")  # up or
-#         motor.close()
-#         return 'The laser is on : {}' .format(on)
+# # Set Laser Power
+# @app.callback(
+#     Output("power-set", "children"),
+#     [Input("power-set-button", "n_clicks")],
+#     [State("power-in", "value")]
+# )
+# def power_button(n_clicks, value):
+#     if n_clicks >= 1:
+#         x = "{}".format(value)
+#         laser.write('POWER SET={}' .format(value))
+#         sleep(0.5)
+#         laser.write('POWER SET={}' .format(value))
+#     else:
+#         return
+
+# ### READ Laser Power ###
+# @app.callback(Output("power-value", "children"),
+#               [Input("stream", "n_intervals")],
+#               [State("connection-est", "value")])
+# def stream_power(_, connection):
+#     if connection:
+#         result = laser.ask('POWER?').split('=')
+#         return result[1]
+#     return str(0)
+
+
+### Enable laser flipper###
+@app.callback(
+    Output('flipper-on', 'children'),
+    [Input('flipper-switch', 'on')])
+def flipper(on):
+    """Switch 'on' or 'off'"""
+    # Raw byte commands for "MGMSG_MOT_MOVE_JOG".
+    #     on = b"\x6A\x04\x00\x01\x21\x01"  # x01 up
+    #     off = b"\x6A\x04\x00\x02\x21\x01"  # x02 down
+
+    if on:
+        motor = ftd2xx.openEx(ser)
+        print(motor.getDeviceInfo())
+        motor.setBaudRate(115200)
+        motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
+        sleep(.05)
+        motor.purge()
+        sleep(.05)
+        motor.resetDevice()
+        motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
+        motor.setRts()
+
+        # Send raw bytes to USB driver.
+        motor.write(b"\x6A\x04\x00\x01\x21\x01")  # up or
+        motor.close()
+        return 'The laser is on : {}'.format(on)
+    else:
+        motor = ftd2xx.openEx(ser)
+        print(motor.getDeviceInfo())
+        motor.setBaudRate(115200)
+        motor.setDataCharacteristics(constants.BITS_8, constants.STOP_BITS_1, constants.PARITY_NONE)
+        sleep(.05)
+        motor.purge()
+        sleep(.05)
+        motor.resetDevice()
+        motor.setFlowControl(constants.FLOW_RTS_CTS, 0, 0)
+        motor.setRts()
+
+        # Send raw bytes to USB driver.
+        motor.write(b"\x6A\x04\x00\x02\x21\x01")  # up or
+        motor.close()
+        return 'The laser is on : {}'.format(on)
+
+
 #
 # ### Status XYZ Positions ###
 # @app.callback(Output("x-value", "children"),
