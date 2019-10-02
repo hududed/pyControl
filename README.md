@@ -16,6 +16,7 @@ The primary aim is to develop a program to allow the user design the experiment 
 4. Princeton Instruments Isoplane SCT320 Raman
 
 
+## Details
 ### Part 0
 Edit user input table to automatically create patterning matrix coordinates.
 Replace individual XYZ coordinate inputs with starting a single XYZ coordinate and subsequent dX or dY safe interval between spots.  
@@ -73,7 +74,7 @@ Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/
                Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
 
 
-### Model Files
+## Model Files
 
 Priority is given to Part 3 specfically reliable connection to Sprout Laser and Princeton Raman.
 Model file is given in:
