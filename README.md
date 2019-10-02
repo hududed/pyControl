@@ -30,8 +30,8 @@ Lab:
 TO-DO: one-line ON/OFF function  
 
 Instrument: Lighthouse Photonics Sprout G12W Laser
-File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py
-Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py
+File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
+Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
 Lab: 
 TO-DO: class function debugging in pymeasure instruments - overwriting problem
 
