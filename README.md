@@ -37,15 +37,16 @@ Instrument: Thorlabs MFF101 Flip Mirror
 File: pyControl/site-packages/ftd2xx  
 Lab:  
 TO-DO: one-line ON/OFF function  
-Documentation: https://github.com/qpit/thorlabs_apt/issues/3
+Documentation: https://github.com/qpit/thorlabs_apt/issues/3  
 
 Instrument: Lighthouse Photonics Sprout G12W Laser (PRIORITY)
 File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
 Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
 Lab: 
-TO-DO: class function debugging in pymeasure instruments - overwriting problem  
+TO-DO: class function debugging in pymeasure instruments - overwriting problem, documentation for contribution   
 Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html  
-               Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>
+               https://pymeasure.readthedocs.io/en/latest/dev/adding_instruments.html (proper contribution to pymeasure)  
+               Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
 ### Part 3 (PRIORITY)
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
