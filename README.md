@@ -84,6 +84,8 @@ Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/
 
 ### Part 5
 TO-DO: Export newline from ML-csv to update surrogate model  
+       Export proposed configuration as newline to ML-csv  
+       Read newline to control laser  
 File: pyControl/Spectrometer Automation/R2py_code.py  
 Docs: https://rpy2.readthedocs.io/en/version_2.8.x/  
 
