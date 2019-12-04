@@ -47,7 +47,7 @@ Documentation: https://github.com/qpit/thorlabs_apt/issues/3
 Instrument: Lighthouse Photonics Sprout G12W Laser (PRIORITY)  
 File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
 Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
-Lab: 
+Lab:  
 TO-DO: class function debugging in pymeasure instruments - overwriting problem, documentation for contribution   
 Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html  
                https://pymeasure.readthedocs.io/en/latest/dev/adding_instruments.html (proper contribution to pymeasure)  
