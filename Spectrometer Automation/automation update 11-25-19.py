@@ -1,21 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[ ]:
-
-
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[52]:
-
-
+import pandas as pd
 import numpy as np
 import glob
-
-
-
-    
 import matplotlib.pyplot as plt
 # Import the .NET class library
 import clr
@@ -25,6 +12,8 @@ import sys
 
 # Import os module
 import os
+
+import time
 
 # Import System.IO for saving and opening files
 from System.IO import *
@@ -48,7 +37,6 @@ from PrincetonInstruments.LightField.AddIns import CameraSettings
 from PrincetonInstruments.LightField.AddIns import ExperimentSettings
 from PrincetonInstruments.LightField.AddIns import DeviceType
 from PrincetonInstruments.LightField.AddIns import SpectrometerSettings
-
         
 def save_file(filename):    
     # Set the base file name
@@ -81,15 +69,9 @@ def device_found():
     print("Camera not found. Please add a camera and try again.")
     return False  
 
-
-
 # Create the LightField Application (true for visible)
 # The 2nd parameter forces LF to load with no experiment 
 auto = Automation(True, List[String]())
-
-
-# In[ ]:
-
 
 application= auto.LightFieldApplication
 experiment = auto.LightFieldApplication.Experiment
@@ -192,8 +174,6 @@ def spectrometer(k):
             # allowing one or more waiting threads to proceed.
             acquireCompleted.Set()
 
-        import time
-
         # Check for device and inform user if one is needed
         if (device_found()==True): 
             experiment.ExperimentCompleted += experiment_completed 
@@ -262,7 +242,6 @@ def spectrometer(k):
                                     ExperimentSettings.
                                     FileNameGenerationDirectory)))  
 
-
             wl= experiment.SystemColumnCalibration
             wavelength=np.zeros((1,1340))
             for i in range(1340):wavelength[0,i]=wl[i]
@@ -310,25 +289,11 @@ def spectrometer(k):
         return spectrometer(k)
 spectrometer(1) 
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
 application= auto.LightFieldApplication
 experiment = auto.LightFieldApplication.Experiment
 file_manager=application.FileManager
 os.chdir("C:\\Users\\labuser")
 
-
-
-
-import pandas as pd
 #import numpy as np
 #import sys
 #import csv
@@ -336,7 +301,7 @@ import pandas as pd
 def spectrometer(k,p):
     if k==5:
         m1="Experiment No."+str(p)+"Background 2D"+".csv"
-        value=2.33
+        value=2.33 # arbitrary for testing
         datt1=pd.read_csv(m1)
         datt2=pd.read_csv(m1)
         datt3=pd.read_csv(m1)
@@ -350,12 +315,9 @@ def spectrometer(k,p):
         if scan=="Yes" or scan=="yes":
             print("Experiment",p+1," started\n")
             spectrometer(1,p+1)
-        else:
-            
+        else:            
             sys.exit() 
-    else:
-        
-        
+    else:               
         if k==1:
             m="Experiment No."+ str(p)+"Background 1D"
             p1="Experiment" + str(p)
@@ -383,8 +345,6 @@ def spectrometer(k,p):
             # Sets the state of the event to signaled,
             # allowing one or more waiting threads to proceed.
             acquireCompleted.Set()
-
-        import time
 
         # Check for device and inform user if one is needed
         if (device_found()==True): 
@@ -440,7 +400,6 @@ def spectrometer(k,p):
                                 intensity_frame[i][pixel]=buffer[pixel]
 
                         file_name.Dispose()
-
 
                     except IOError:
                         print ("Error: can not find file or read data")
@@ -497,18 +456,7 @@ print("Enter The Experiment Number:\n")
 p=int(input())
 spectrometer(1,p)
 
-
-# In[ ]:
-
-
 auto = Automation(True, List[String]())
 application= auto.LightFieldApplication
 experiment = auto.LightFieldApplication.Experiment
 file_manager=application.FileManager
-
-
-# In[ ]:
-
-
-
-
