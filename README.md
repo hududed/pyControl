@@ -19,14 +19,14 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 ## Details
 ### Part 0 (OK)
-TO-DO: 
-User should define parameter set i.e. how many parameters, type of parameters (continuous or discrete) and limits [F1].
-User should define size of initial dataset, and dataset is randomly sampled from parameter space [F1].
-Data written to ML-csv [F1].
-Build surrogate model using initial dataset R -> python code [F2].
+TO-DO:  
+User should define parameter set i.e. how many parameters, type of parameters (continuous or discrete) and limits [F1].  
+User should define size of initial dataset, and dataset is randomly sampled from parameter space [F1].  
+Data written to ML-csv [F1].  
+Build surrogate model using initial dataset R -> python code [F2].  
 Move stage to set initial XYZ coordinate and run iterations subsequent dX or dY safe interval between spots/lines.  
-F1: pyControl/Spectrometer Automation/initial experiment.py
-F2: pyControl/Spectrometer Automation/R2py_code.py
+F1: pyControl/Spectrometer Automation/initial experiment.py  
+F2: pyControl/Spectrometer Automation/R2py_code.py  
 
 ### Part 1
 Instrument: Newport ESP300 XYZ controller  
@@ -44,7 +44,7 @@ Lab:
 TO-DO: one-line ON/OFF function  
 Documentation: https://github.com/qpit/thorlabs_apt/issues/3  
 
-Instrument: Lighthouse Photonics Sprout G12W Laser (PRIORITY)
+Instrument: Lighthouse Photonics Sprout G12W Laser (PRIORITY)  
 File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
 Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
 Lab: 
@@ -54,15 +54,15 @@ Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html
                Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
 ### Part 3 (PRIORITY)
-TO-DO: extract raw data, spe files (DONE)
-       integrate flip mirror
-       integrate lasing controls
+TO-DO: extract raw data, spe files (DONE)  
+       integrate flip mirror  
+       integrate lasing controls  
        
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Spectrometer Automation/automation update 11-25-19.py
+File: pyControl/Spectrometer Automation/automation update 11-25-19.py  
 Lab:  
 Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
-               Contact LightField support recommended mailto:techsupport@princetoninstruments.com
+               Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
 
 Instrument: Lighthouse Photonics Sprout G12W Laser  
 File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
@@ -73,19 +73,19 @@ Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html
                Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
 ### Part 4
-TO-DO: extract raw data, spe files (DONE)
-       fit data, export all as columns in a new line in ML-csv
+TO-DO: extract raw data, spe files (DONE)  
+       fit data, export all as columns in a new line in ML-csv  
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Spectrometer Automation/automation update 11-25-19.py
+File: pyControl/Spectrometer Automation/automation update 11-25-19.py  
 Fitting File: tba  
 Lab:
 Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
                Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
 
 ### Part 5
-TO-DO: Export newline from ML-csv to update surrogate model
-File: pyControl/Spectrometer Automation/R2py_code.py
-Docs: https://rpy2.readthedocs.io/en/version_2.8.x/
+TO-DO: Export newline from ML-csv to update surrogate model  
+File: pyControl/Spectrometer Automation/R2py_code.py  
+Docs: https://rpy2.readthedocs.io/en/version_2.8.x/  
 
 
 ## Model Files
