@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[70]:
-
-
 ##Create the initial random dataset
 
 import numpy as np
@@ -24,19 +21,8 @@ with open('dataset-2.csv', 'w', newline='') as f:
         writer.writerow(row)
         writer.writerows(zip(power,time,gas,pressure))
 
-
-# In[ ]:
-
-
-
-
-
-# In[72]:
-
-
 #File 2
 #This will work for setting D to G ratio for 1st 20 random values
-
 
 import pandas as pd
 def update_ratio(k,value):
@@ -49,10 +35,3 @@ for i in range(22):
         print("Stop Running, Initial Experiment Done")
         break
     update_ratio(i,i*i)
-
-
-# In[ ]:
-
-
-
-
