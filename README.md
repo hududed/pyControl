@@ -4,10 +4,11 @@
 
 The primary aim is to develop a program to allow the user design the experiment and the run the process independently. The program should be divided into four main parts:
 
-1.	Moving the XYZ stage
+1.	Setup surrogate model, initiate moving the XYZ stage
 2.	Setting laser parameters for patterning
 3.	Acquiring Raman Data
 4.	Raman Data Analysis and export
+5.  Update surrogate model, predict new point
 
 ## Instruments:
 1. Newport ESP300 XYZ controller  
@@ -17,11 +18,15 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 
 ## Details
-### Part 0
-Edit user input table to automatically create patterning matrix coordinates.
-Replace individual XYZ coordinate inputs with starting a single XYZ coordinate and subsequent dX or dY safe interval between spots.  
-File: pyControl/codes/Table_test.py  
-Documentation: https://dash.plot.ly/datatable
+### Part 0 (OK)
+TO-DO: 
+User should define parameter set i.e. how many parameters, type of parameters (continuous or discrete) and limits [F1].
+User should define size of initial dataset, and dataset is randomly sampled from parameter space [F1].
+Data written to ML-csv [F1].
+Build surrogate model using initial dataset R -> python code [F2].
+Move stage to set initial XYZ coordinate and run iterations subsequent dX or dY safe interval between spots/lines.  
+F1: pyControl/Spectrometer Automation/initial experiment.py
+F2: pyControl/Spectrometer Automation/R2py_code.py
 
 ### Part 1
 Instrument: Newport ESP300 XYZ controller  
@@ -49,13 +54,15 @@ Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html
                Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
 ### Part 3 (PRIORITY)
+TO-DO: extract raw data, spe files (DONE)
+       integrate flip mirror
+       integrate lasing controls
+       
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Examples/Python Automation/synhcronous_acquisition  
+File: pyControl/Spectrometer Automation/automation update 11-25-19.py
 Lab:  
-TO-DO: extract raw data  
 Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
                Contact LightField support recommended mailto:techsupport@princetoninstruments.com
-
 
 Instrument: Lighthouse Photonics Sprout G12W Laser  
 File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
@@ -65,14 +72,20 @@ TO-DO: class function debugging in pymeasure instruments - overwriting problem
 Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html  
                Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
-### Part 4 (soon)
+### Part 4
+TO-DO: extract raw data, spe files (DONE)
+       fit data, export all as columns in a new line in ML-csv
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Examples/Python Automation/synhcronous_acquisition  
+File: pyControl/Spectrometer Automation/automation update 11-25-19.py
 Fitting File: tba  
-Lab:  
-TO-DO: extract raw data  
+Lab:
 Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
                Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
+
+### Part 5
+TO-DO: Export newline from ML-csv to update surrogate model
+File: pyControl/Spectrometer Automation/R2py_code.py
+Docs: https://rpy2.readthedocs.io/en/version_2.8.x/
 
 
 ## Model Files
