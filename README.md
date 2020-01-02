@@ -15,7 +15,7 @@ The primary aim is to develop a program to allow the user design the experiment 
 3. Lighthouse Photonics Sprout G12W Laser  
 4. Princeton Instruments Isoplane SCT320 Raman
 
-##Completed Works
+## Completed Works
 
 ## Details
 ### Part 0
