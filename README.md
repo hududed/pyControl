@@ -16,7 +16,7 @@ The primary aim is to develop a program to allow the user design the experiment 
 4. Princeton Instruments Isoplane SCT320 Raman
 
 ## Completed Works
-## ............................................
+** ............................................**
 ## Details
 ### Part 0
 Edit user input table to automatically create patterning matrix coordinates.
