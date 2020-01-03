@@ -16,8 +16,7 @@ for x in range(20):
     pressure.append(np.random.randint(0,100))
 
 row=['power','time','gas','pressure','ratio']
-with open('dataset-2.csv', 'w', newline='') as f:
+with open('ml_file.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(row)
         writer.writerows(zip(power,time,gas,pressure))
-
