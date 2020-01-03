@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-
-
 ##Create the initial random dataset
 
 import numpy as np
@@ -22,9 +20,3 @@ with open('ml_file.csv', 'w', newline='') as f:
         writer = csv.writer(f)
         writer.writerow(row)
         writer.writerows(zip(power,time,gas,pressure))
-
-
-
-
-
-
