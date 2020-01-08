@@ -18,7 +18,7 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 **Current Challenge**
 
-1. Find the exact coordinates of GO, Quartz, Kapton.
+1. Find the exact coordinates of GO(Graphene Oxide), Quartz, Kapton.
 2. Calibrate the Laser power and monitor if patterning is done properly or not.
 3. Run experiments on many points of a sample to monitor time-out issues from ESP 300 (motion controller) and solve them if it shows up.
 
