@@ -24,7 +24,11 @@ The primary aim is to develop a program to allow the user design the experiment 
         Kapton Coordinates: under research.
         Quartz: under research.
      
-2. Calibrate the Laser power and monitor if patterning is done properly or not.
+2. Calibrate the Laser power and monitor if patterning is done properly or not. (Solved).
+
+        laser_power.power=((power_in_csv_file-2.7979)/0.4639)/1000
+        This equation is used to calibrate the laser power, because the machine LightHouse Photonics doesn't exactly delivers the power         which it shows up in it's display. Some power loss occurs during propagation.
+        
 3. Run experiments on many points of a sample to monitor time-out issues from ESP 300 (motion controller) and solve them if it shows up.
  (Time out issues solved)
 
