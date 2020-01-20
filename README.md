@@ -20,9 +20,9 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 1. Find the exact coordinates of GO(Graphene Oxide), Quartz, Kapton.
     
-     GO Coordinates : (3,3)--->(9,9), step size .5, .5. It worked well.
-     Kapton Coordinates: under research.
-     Quartz: under research.
+        GO Coordinates : (3,3)--->(9,9), step size .5, .5. It worked well.
+        Kapton Coordinates: under research.
+        Quartz: under research.
      
 2. Calibrate the Laser power and monitor if patterning is done properly or not.
 3. Run experiments on many points of a sample to monitor time-out issues from ESP 300 (motion controller) and solve them if it shows up.
