@@ -32,6 +32,9 @@ The primary aim is to develop a program to allow the user design the experiment 
 3. Run experiments on many points of a sample to monitor time-out issues from ESP 300 (motion controller) and solve them if it shows up.
  (Time out issues solved)
 
+4. Limit repatterning bad data to 2 retries. If all fails write response as 0.
+
+5. Run MBO only after `n` values, instead of `n` indexes.
 
 
 ## Completed Works
@@ -72,10 +75,10 @@ Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html
                https://pymeasure.readthedocs.io/en/latest/dev/adding_instruments.html (proper contribution to pymeasure)  
                Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
 
-### Part 3 (PRIORITY)
+### Part 3
 TO-DO: extract raw data, spe files (DONE)  
-       integrate flip mirror  
-       integrate lasing controls  
+       integrate flip mirror (DONE)
+       integrate lasing controls (DONE)  
        
 Instrument: Princeton Instruments Isoplane SCT320 Raman  
 File: pyControl/Spectrometer Automation/automation update 11-25-19.py  
@@ -102,9 +105,9 @@ Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/
                Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
 
 ### Part 5
-TO-DO: Export newline from ML-csv to update surrogate model  
-       Export proposed configuration as newline to ML-csv  
-       Read newline to control laser  
+TO-DO: Export newline from ML-csv to update surrogate model (DONE)
+       Export proposed configuration as newline to ML-csv (DONE)  
+       Read newline to control laser (DONE)  
 File: pyControl/Spectrometer Automation/R2py_code.py  
 Docs: https://rpy2.readthedocs.io/en/version_2.8.x/  
 
