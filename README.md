@@ -36,81 +36,24 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 5. Run MBO only after `n` values, instead of `n` indexes.
 
-
-## Completed Works
- ........................................................................................................................
-## Details
-### Part 0 (OK)
-TO-DO:  
-User should define parameter set i.e. how many parameters, type of parameters (continuous or discrete) and limits [F1].  
-User should define size of initial dataset, and dataset is randomly sampled from parameter space [F1].  
-Data written to ML-csv [F1].  
-Build surrogate model using initial dataset R -> python code [F2].  
-Move stage to set initial XYZ coordinate and run iterations subsequent dX or dY safe interval between spots/lines.  
-F1: pyControl/Spectrometer Automation/initial experiment.py  
-F2: pyControl/Spectrometer Automation/R2py_code.py  
-
-### Part 1
-Instrument: Newport ESP300 XYZ controller  
-File: pyControl/site-packages/pymeasure/instruments/newport/ESP300.py  
-Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
-Lab:  
-TO-DO: continuous stream reading  
-Documentation: https://pymeasure.readthedocs.io/en/latest/api/instruments/newport/esp300.html  
-               see also pyControl/Manual/
-
-### Part 2 
-Instrument: Thorlabs MFF101 Flip Mirror  
-File: pyControl/site-packages/ftd2xx  
-Lab:  
-TO-DO: one-line ON/OFF function  
-Documentation: https://github.com/qpit/thorlabs_apt/issues/3  
-
-Instrument: Lighthouse Photonics Sprout G12W Laser (PRIORITY)  
-File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
-Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
-Lab:  
-TO-DO: class function debugging in pymeasure instruments - overwriting problem, documentation for contribution   
-Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html  
-               https://pymeasure.readthedocs.io/en/latest/dev/adding_instruments.html (proper contribution to pymeasure)  
-               Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
-
-### Part 3
-TO-DO: extract raw data, spe files (DONE)  
-       integrate flip mirror (DONE)
-       integrate lasing controls (DONE)  
-       
-Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Spectrometer Automation/automation update 11-25-19.py  
-Lab:  
-Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
-               Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
-
-Instrument: Lighthouse Photonics Sprout G12W Laser  
-File: pyControl/site-packages/pymeasure/instruments/lighthousephotonics/sprout.py  
-Calls class: pyControl/site-packages/pymeasure/instruments/instrument.py  
-Lab:  
-TO-DO: class function debugging in pymeasure instruments - overwriting problem  
-Documentation: https://pymeasure.readthedocs.io/en/latest/tutorial/index.html  
-               Contact also Lighthouse Photonics Service <service@lighthousephotonics.com>  
-
-### Part 4
-TO-DO: extract raw data, spe files (DONE)  
-       fit data, export all as columns in a new line in ML-csv  
-Instrument: Princeton Instruments Isoplane SCT320 Raman  
-File: pyControl/Spectrometer Automation/automation update 11-25-19.py  
-Fitting File: tba  
-Lab:
-Documentation: pyControl/Manual/LightField/Add-in and Automation SDK/  
-               Contact LightField support recommended mailto:techsupport@princetoninstruments.com  
-
-### Part 5
-TO-DO: Export newline from ML-csv to update surrogate model (DONE)
-       Export proposed configuration as newline to ML-csv (DONE)  
-       Read newline to control laser (DONE)  
-File: pyControl/Spectrometer Automation/R2py_code.py  
-Docs: https://rpy2.readthedocs.io/en/version_2.8.x/  
-
+## HOW-TO  
+1. Git clone this repo to your local machine.  
+2. Create a new virtual environment, activate it and install requirements.  
+3. Run notebook `pyControl/Updated Codes/initial experiment.ipynb`,  
+   and define number of training data and parameter set.  
+   --> Parameters will be written randomly as `results/dataset.csv`. (TO-DO: fixed paths)  
+4. Run notebook `pyControl/Updated Codes/main program.ipynb`  
+5. Initialize IsoPlane Spectrometer. (TO-DO: Catch error so that main program doesn't run without this init)
+6. Define `capture_photo` [Raman] and `ration` [fit code] (TO-DO: make as imports!)  
+7. Update `path/to/dataset.csv` and parameter set for MBO in `rpy2objects.robjects` in main program cell.  
+   (TO-DO: fixed folders and paths using example dataset)  
+8. Run main program.  
+9. Set start `(x1,y1)`, end coordinates `(x2,y2)` and intervals `(dx,dy)`.  
+10. Following outputs are written to `results`: (TO-DO: fixed paths)  
+    - Two Raw Raman spectrum files `foreground1D.csv` and `foreground2D.csv` for each pattern.  
+    - One fit results `fit.csv` with each pattern as newline.  
+    - One updated file for MBO `dataset.csv` with each pattern as newline,  
+      containing `estimated` and `estimatedUpper` when MBO starts predictions.      
 
 ## Model Files
 
