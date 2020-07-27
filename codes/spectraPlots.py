@@ -173,7 +173,7 @@ def ration(m1,m2,counter):
     
     #plt.plot(x2,y2)
     import os
-    os.chdir(r'C:\Users\labuser\campaign july 6 2020 CB lambda 5')
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
     #if i==0:os.mkdir('figures of the experiments')  
     os.chdir('figures of the experiments')
     plt.savefig('Graphene spot ' + str(i) + '.png')
@@ -189,7 +189,7 @@ def ration(m1,m2,counter):
     #plt.plot(x2,y2)
     plt.savefig('Graphene 2D spot ' + str(i) + '.png')
     plt.clf()
-    os.chdir(r'C:\Users\labuser\campaign july 6 2020 CB lambda 5')
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
     
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
     df2 = pd.DataFrame({key: [par.value] for key, par in out2.params.items()})
@@ -208,9 +208,7 @@ def ration(m1,m2,counter):
     df.columns= ['D','PD','WD','FD','G','PG','WG','FG','2D','P2D','W2D','F2D']
     df['GD']=df['G']/df['D']
     df['2DG']=df['2D']/df['G']
-#     ml_file = pd.read_csv("dataset-2.csv")
-#     ml_file.set_value(counter, "ratio", df['GD'].values)
-#     ml_file.to_csv("dataset-2.csv", index=False)  
+ 
 
     if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
 
@@ -221,12 +219,7 @@ def ration(m1,m2,counter):
         data=pd.read_csv('dataset-2.csv')
         p=data['power']
         t=data['time']
-        #pres=data['pressure']
-        #gas=data['gas']
-#         p[counter+1]=p[counter]
-#         t[counter+1]=t[counter]
-#         pres[counter+1]=pres[counter]
-#         gas[counter+1]=gas[counter]
+       
         import csv
         if counter==0 or counter==1:
             toAdd = [p[counter],t[counter]]
@@ -239,23 +232,12 @@ def ration(m1,m2,counter):
                 writer = csv.writer(outfile)
                 for line in reader:
                     writer.writerow(line)
-    #         ml_file = pd.read_csv("dataset-2.csv")
-    #         ml_file.set_value(counter, "ratio", " ")
-    #         ml_file.set_value(counter+1, "power",p[counter+1])
-    #         ml_file.set_value(counter+1, "time",t[counter+1])
-    #         ml_file.set_value(counter+1, "pressure",pres[counter+1])
-    #         ml_file.set_value(counter+1, "gas",gas[counter+1])
-    #         ml_file.to_csv("dataset-2.csv", index=False)
+ 
 
 
 
             df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
-    #         ml_file = pd.read_csv("dataset-2.csv")
-    #         ml_file.set_value(counter, "ratio", "NO")
-    #         ml_file.to_csv("dataset-2.csv", index=False) 
-    #         fit_file=pd.read_csv("fit.csv")
-    #         fit_file.set_value(counter,df.columns,df.values)
-    #         fit_file.to_csv("fit.csv",index=False)
+   
         else:
             if p[counter]==p[counter-1] and p[counter-1]==p[counter-2] and t[counter]==t[counter-1] and t[counter-1]==t[counter-2]:
                 print("No shifting will take place")
@@ -273,13 +255,7 @@ def ration(m1,m2,counter):
                     writer = csv.writer(outfile)
                     for line in reader:
                         writer.writerow(line)
-    #         ml_file = pd.read_csv("dataset-2.csv")
-    #         ml_file.set_value(counter, "ratio", " ")
-    #         ml_file.set_value(counter+1, "power",p[counter+1])
-    #         ml_file.set_value(counter+1, "time",t[counter+1])
-    #         ml_file.set_value(counter+1, "pressure",pres[counter+1])
-    #         ml_file.set_value(counter+1, "gas",gas[counter+1])
-    #         ml_file.to_csv("dataset-2.csv", index=False)
+  
 
 
 
