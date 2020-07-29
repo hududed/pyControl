@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# In[1]:
 
 
 def ration(m1,m2,counter):
@@ -10,40 +10,43 @@ def ration(m1,m2,counter):
     get_ipython().run_line_magic('pylab', 'inline')
 
 
+    from matplotlib.ticker import MultipleLocator
+    get_ipython().run_line_magic('reload_ext', 'autoreload')
+    get_ipython().run_line_magic('autoreload', '2')
+    get_ipython().run_line_magic('pylab', 'inline')
+    import sys
+    from lmfit import Parameters, minimize
     import pandas as pd # python data manipulation and analysis library
     import numpy as np #  Library with large collection of high-level mathematical functions to operate on arrays
     import matplotlib.pyplot as plt #python plotting library
     import peakutils #baselining library
 
     import os, glob, csv
-     # Library with operating system dependent functionality. Example: Reading data from files on the computer
-
-    from lmfit import Parameters, minimize
-    bg1 = pd.read_csv("background1D.csv")  # bg_G
-    fn1 = pd.read_csv("foreground1D.csv")  # fn_G
-
-    bg2 = pd.read_csv("background2D.csv")  # bg_2D
-    fn2 = pd.read_csv("foreground2D.csv")  # fn_2D
+ # Library with operating system dependent functionality. Example: Reading data from files on the computer
+    bg1=pd.read_csv("background1D.csv")
+    bg2=pd.read_csv("background2D.csv")
+#     fn1 =pd.read_csv("foreground1D.csv")
+#     fn2 = pd.read_csv("foreground2D.csv")
+    fn1=pd.read_csv("Point "+str(counter)+" foreground1D.csv")
+    fn2=pd.read_csv("Point "+str(counter)+" foreground2D.csv")
 
     # d1 = pd.read_csv(fn1)
+    d1 = fn1
     # d1_ = pd.read_csv(bg1)
-    d1=fn1
-    d1_=bg1
+    d1_= bg1
+    d1['I'] = d1['I']-d1_['I']
+    base1 = peakutils.baseline(d1['I'], 1)
+    d1['I_base']= d1['I']-base1
+    d1 = d1[(d1['W']>1250) & (d1['W']<1750)]
 
-
-    d2=fn2
-    d2_=bg2
-
-
-    d2['I']=d2['I']-d2_['I']
+    # d2 = pd.read_csv(fn2)
+    d2 = fn2
+    # d2_ = pd.read_csv(bg2)
+    d2_= bg2
+    d2['I'] = d2['I']-d2_['I']
     base2 = peakutils.baseline(d2['I'], 1)
-    d2['I_base']= d2['I']-base2
-    # d2 = d2[(d2['W']>2600) & (d2['W']<2850)]
-
-
-    d1.plot('W','I_base')
-
-    d2.plot('W','I_base')
+    d2['I_base'] = d2['I']-base2
+    d2 = d2[(d2['W']>2600) & (d2['W']<2850)]
 
     def PseudoVoigtFunction(WavNr, Pos, Amp, GammaL, FracL):
         SigmaG = GammaL / np.sqrt(2*np.log(2)) # Calculate the sigma parameter  for the Gaussian distribution from GammaL (coupled in Pseudo-Voigt)
@@ -52,8 +55,6 @@ def ration(m1,m2,counter):
         Fit = FracL * LorentzPart + (1 - FracL) * GaussPart # Linear combination of the two parts (or distributions)
         return Fit
 
-
-
     def one_pv(pars, x, data=None, eps=None): #Function definition
         # unpack parameters, extract .value attribute for each parameter
         a3 = pars['a3'].value
@@ -61,9 +62,7 @@ def ration(m1,m2,counter):
         s3 = pars['s3'].value
         f3 = pars['f3'].value
 
-    #     background = line(x, m, c)
         peak1 = PseudoVoigtFunction(x.astype(float),c3, a3, s3, f3)
-    #     peak2 = PseudoVoigtFunction(x.astype(float),c2, a2, s2, f2)
 
         model =  peak1  # The global model is the sum of the Gaussian peaks
 
@@ -80,19 +79,13 @@ def ration(m1,m2,counter):
         s1 = pars['s1'].value
         f1 = pars['f1'].value
 
-
         a2 = pars['a2'].value
         c2 = pars['c2'].value
         s2 = pars['s2'].value
         f2 = pars['f2'].value
 
-
-    #     m = pars['m'].value
-    #     c = pars['c'].value
-
-    #     background = line(x, m, c)
-        peak1 = PseudoVoigtFunction(x.astype(float),c1, a1, s1, f1)
-        peak2 = PseudoVoigtFunction(x.astype(float),c2, a2, s2, f2)
+        peak1 = PseudoVoigtFunction(x.astype(float), c1, a1, s1, f1)
+        peak2 = PseudoVoigtFunction(x.astype(float), c2, a2, s2, f2)
 
         model =  peak1 + peak2  # The global model is the sum of the Gaussian peaks
 
@@ -132,8 +125,8 @@ def ration(m1,m2,counter):
     x2 = d2['W']
     y2 = d2['I_base']
     out2 = minimize(one_pv, ps2, method = 'leastsq', args=(x2, y2))
-
-    f, (ax,ax2)=plt.subplots(1,2,sharey=True, gridspec_kw = {'width_ratios':[1.5, 1]})
+    #f, (ax,ax2)=plt.subplots(1,2,sharey=True, gridspec_kw = {'width_ratios':[2.5, 1]})
+    f, (ax,ax2)=plt.subplots(1,2,sharey=True, gridspec_kw = {'width_ratios':[2.5, 1]})
     f.subplots_adjust(wspace=0.1)
 
     ax.xaxis.set_major_locator(MultipleLocator(200))
@@ -169,13 +162,41 @@ def ration(m1,m2,counter):
 
     # ax.legend(loc='upper right')
     # plt.savefig(p/'Raman_raw_111.png', format='png', dpi=300)
-    plt.show()
-
+    #plt.show()
+    plt.figure(figsize=(10,7))
+    plt.plot(x,y)
+    
+    plt.plot(x,two_pv(out.params, x)[0])
+    plt.xlabel('Raman shift [cm$^{-1}$]')
+    plt.ylabel('Intensity [a.u.]')
+    i=counter
+    
+    #plt.plot(x2,y2)
+    import os
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
+    #if i==0:os.mkdir('figures of the experiments')  
+    os.chdir('figures of the experiments')
+    plt.savefig('Graphene spot ' + str(i) + '.png')
+    plt.clf()
+    
+    plt.figure(figsize=(10,7))
+    plt.plot(x2,y2)
+    
+    plt.plot(x2,one_pv(out2.params, x2)[0])
+    plt.xlabel('Raman shift [cm$^{-1}$]')
+    plt.ylabel('Intensity [a.u.]')
+    i=counter
+    #plt.plot(x2,y2)
+    plt.savefig('Graphene 2D spot ' + str(i) + '.png')
+    plt.clf()
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
+    
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
     df2 = pd.DataFrame({key: [par.value] for key, par in out2.params.items()})
+
     df = pd.concat([df1,df2],axis=1)
 
-    if df['s1'].values > 120:
+    if df['s1'].values > 300:
         df[['a1','c1','s1','f1']] = 0
 
     if df['s2'].values > 120:
@@ -183,15 +204,81 @@ def ration(m1,m2,counter):
 
     if df['s3'].values > 120:
         df[['a3','c3','s3','f3']] = 0
-    df
+
     df.columns= ['D','PD','WD','FD','G','PG','WG','FG','2D','P2D','W2D','F2D']
     df['GD']=df['G']/df['D']
     df['2DG']=df['2D']/df['G']
-    df
-    ml_file = pd.read_csv("dataset-2.csv")
-    ml_file.set_value(counter, "ratio", df['GD'])
-    ml_file.to_csv("dataset-2.csv", index=False)        
+ 
 
-    
-    df.to_csv("fit.csv", mode='a',encoding='utf-8',header=False)
+    if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
+
+        print("patterning not done")
+#         ml_file = pd.read_csv("dataset-2.csv")
+#         ml_file.set_value(counter, "ratio"," ")
+#         ml_file.to_csv("dataset-2.csv", index=False)
+        data=pd.read_csv('dataset-2.csv')
+        p=data['power']
+        t=data['time']
+       
+        import csv
+        if counter==0 or counter==1:
+            toAdd = [p[counter],t[counter]]
+            filename="dataset-2.csv"
+            with open(filename, "r") as infile:
+                reader = list(csv.reader(infile))
+                reader.insert(counter+1, toAdd)
+
+            with open(filename, "w", newline='') as outfile:
+                writer = csv.writer(outfile)
+                for line in reader:
+                    writer.writerow(line)
+ 
+
+
+
+            df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
+   
+        else:
+            if p[counter]==p[counter-1] and p[counter-1]==p[counter-2] and t[counter]==t[counter-1] and t[counter-1]==t[counter-2]:
+                print("No shifting will take place")
+                ml_file = pd.read_csv("dataset-2.csv")
+                ml_file.set_value(counter, "ratio", 0)
+                ml_file.to_csv("dataset-2.csv", index=False) 
+            else:
+                toAdd = [p[counter],t[counter]]
+                filename="dataset-2.csv"
+                with open(filename, "r") as infile:
+                    reader = list(csv.reader(infile))
+                    reader.insert(counter+1, toAdd)
+
+                with open(filename, "w", newline='') as outfile:
+                    writer = csv.writer(outfile)
+                    for line in reader:
+                        writer.writerow(line)
+  
+
+
+
+            df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
+    else:
+        ml_file = pd.read_csv("dataset-2.csv")
+        ml_file.set_value(counter, "ratio", df['GD'].values)
+        ml_file.to_csv("dataset-2.csv", index=False)  
+        plot_file= pd.read_csv("plot_data.csv")
+        plot_file.set_value(counter,"ratio", df['GD'].values)
+        plot_file.to_csv("plot_data.csv", index=False)
+        df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
+        p=df['GD']
+        twoGD=df['2DG']
+        twoD=df['2D']
+        G=df['G']
+        WD=df['WD']
+        WG=df['WG']
+        return p,twoGD,twoD,G,WD,WG
+
+
+# In[ ]:
+
+
+
 
