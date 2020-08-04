@@ -3,14 +3,14 @@
 ### Abstract
 
 The primary aim is to develop a program to allow the user design the experiment and the run the process independently. The program works in following fashion:
-1.	Setting laser parameters for patterning
-2.	Setup surrogate model, initiate moving the XYZ stage
-3. Auto adjust z axis of motion controller for each spot.
-4.	Start patterning.
-5. Acquiring Raman Data.
-6.	Raman Data Analysis and export.
-7. Update surrogate model, predict new candidates.
-8. Repeat process 2-7 until all the spots are patterned.
+1.	Setting laser parameters for patterning,
+2.	Setup surrogate model, initiate moving the XYZ stage,
+3. Auto adjust z axis of motion controller for each spot,
+4.	Start patterning,
+5. Acquiring Raman Data,
+6.	Raman Data Analysis and export,
+7. Update surrogate model, predict new candidates,
+8. Repeat process 2-7 until all the spots are patterned,
 9. Save the Optimizer model for post-analysis.
 
 ## Instruments:
