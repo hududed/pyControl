@@ -12,6 +12,7 @@ The primary aim is to develop a program to allow the user design the experiment 
 6.	Raman Data Analysis and export.
 7. Update surrogate model, predict new candidates.
 8. Repeat process 2-7 until all the spots are patterned.
+9. Save the Optimizer model for post-analysis.
 
 ## Instruments:
 1. Newport ESP300 XYZ controller  
@@ -33,6 +34,7 @@ The primary aim is to develop a program to allow the user design the experiment 
    and insert the parameters and their range.  
    --> Parameters will be written randomly as `results/dataset.csv`. (TO-DO: fixed paths)  
 4. Run notebook `pyControl/Updated Codes/main program.ipynb`. 
+   (https://github.com/hududed/pyControl/blob/master/codes/main%20program.ipynb)
 5. Initialize IsoPlane Spectrometer. (TO-DO: Catch error so that main program doesn't run without this init)
 6. Define `capture_photo` [Raman] and `ration` [fit code] (TO-DO: make as imports!)  
 7. Update `path/to/dataset.csv` and parameter set for MBO in `rpy2objects.robjects` in main program cell.  
