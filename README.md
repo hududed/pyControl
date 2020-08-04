@@ -2,8 +2,7 @@
 
 ### Abstract
 
-The primary aim is to develop a program to allow the user design the experiment and the run the process independently. The program should be divided into four main parts:
-
+The primary aim is to develop a program to allow the user design the experiment and the run the process independently. The program works in following fashion:
 1.	Setting laser parameters for patterning
 2.	Setup surrogate model, initiate moving the XYZ stage
 3. Auto adjust z axis of motion controller for each spot.
