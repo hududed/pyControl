@@ -12,7 +12,7 @@ from pymeasure.instruments import list_resources
 import pandas as pd
 
 
-# TCP auto connect on first modbus request (PAC100)
+# TCP auto connect on first modbus request (MKS Newport PAC100)
 c = ModbusClient(host="192.168.1.3", port=502, auto_open=True)
 
 # connect to NXDS vacuum pump
@@ -56,6 +56,7 @@ def close_all():
 close_all()
 
 def gopr(pr):
+    """Goes to pressure input"""
     while current_pressure()>pr:
         open_valve('out')
     close_valve('out')
