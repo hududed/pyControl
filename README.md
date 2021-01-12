@@ -43,3 +43,10 @@ The primary aim is to develop a program to allow the user design the experiment 
     - the optimizer model opt.state.rds are saved at `directory/campaign_current_date/'
     - All the csv files for foreground and background 1D, 2D are saved at `directory/campaign_current_date/'.
      
+## Line-Patterning
+1. Define threads: (a) motion controller thread (b) mirror switching thread
+2. Prepare initial data: 
+    - dataset.csv contains post patterning spots raman spectra data
+	- dataset-pre.csv contains pre patterning spots raman spectra data
+	- data.csv contains only one data for one line and this file interacts with BO.
+3. Assign number of lines to be patterned, starting position in x axis, starting position in y axis, vertical gap between the lines.
