@@ -31,6 +31,36 @@ from PrincetonInstruments.LightField.AddIns import SpectrometerSettings
 
 import time
     
+# %reload_ext autoreload
+# %autoreload 2
+# %matplotlib inline
+# %pylab inline
+
+
+import pandas as pd # python data manipulation and analysis library
+import numpy as np #  Library with large collection of high-level mathematical functions to operate on arrays
+import matplotlib.pyplot as plt #python plotting library
+import peakutils #baselining library
+
+from scipy.optimize import curve_fit
+import os,glob
+ # Library with operating system dependent functionality. Example: Reading data from files on the computer
+
+import csv
+# from pathlib import *
+import mplcursors
+
+from sklearn import preprocessing
+
+from lmfit import Parameters, minimize
+from scipy import stats
+
+
+
+
+
+
+
 
 
 def capture_photo(begin,exp_no):
@@ -120,7 +150,8 @@ def capture_photo(begin,exp_no):
                 # Acquire image
                 experiment.Acquire()
                 time.sleep(5)
-                directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                #directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                directory="C:\\Users\\UWAdmin\\Desktop\\AIM-Lab-Automation-master\\AIM-Lab-Automation-master\\spes"
                 if( os.path.exists(directory)):        
 #                         print("\nFound the .spe file...")        
                         print(" ")
@@ -132,8 +163,7 @@ def capture_photo(begin,exp_no):
 
                         try:
                             # Open file
-                            file_name = file_manager.OpenFile(
-                                last_image_acquired, FileAccess.Read)
+                            file_name = file_manager.OpenFile(last_image_acquired, FileAccess.Read)
 
                             # Access image
                             file=file_name
@@ -159,7 +189,7 @@ def capture_photo(begin,exp_no):
 
                 else:
 #                     print(".spe file not found...")
-                  print(" ")
+                    print(" ")
 
 #                 print(String.Format("{0} {1}",
 #                                     "Image saved to",
@@ -231,7 +261,8 @@ def capture_photo(begin,exp_no):
                 # Acquire image
                 experiment.Acquire()
                 time.sleep(35)
-                directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                #directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                directory="C:\\Users\\UWAdmin\\Desktop\\AIM-Lab-Automation-master\\AIM-Lab-Automation-master\\spes"
                 if( os.path.exists(directory)):        
 #                         print("\nFound the .spe file...")        
                         print(" ")
@@ -347,8 +378,9 @@ def capture_photo(begin,exp_no):
                 # Acquire image
                 experiment.Acquire()
                 time.sleep(35)
-                directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
-                if( os.path.exists(directory)):        
+                #directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                directory="C:\\Users\\UWAdmin\\Desktop\\AIM-Lab-Automation-master\\AIM-Lab-Automation-master\\spes"
+                if( os.path.exists(directory)): 
 #                         print("\nFound the .spe file...")        
                         print(" ")
                         # Returns all .spe files
@@ -468,8 +500,9 @@ def capture_photo(begin,exp_no):
 
                 # Acquire image
                 experiment.Acquire()
-                time.sleep(35)
-                directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                time.sleep(25)
+                #directory="C:\\Users\\labuser\\Desktop\\data\\Raman\\Vivek\\2019-10-08"
+                directory="C:\\Users\\UWAdmin\\Desktop\\AIM-Lab-Automation-master\\AIM-Lab-Automation-master\\spes"
                 if( os.path.exists(directory)):        
 #                         print("\nFound the .spe file...")        
                         print(" ")
@@ -551,49 +584,52 @@ def capture_photo(begin,exp_no):
         return gd
         
             
-def ration(m1,m2,counter):
-    get_ipython().run_line_magic('reload_ext', 'autoreload')
-    get_ipython().run_line_magic('autoreload', '2')
-    get_ipython().run_line_magic('pylab', 'inline')
 
+def ration(a,b,i):
+    
+   
+   
+    """Plots LIG BEFORE PATTERN and get saves fits as fits.csv
+    Plots currently saved manually.
+    TO-DO: save each plot directly from this function
+    d1: GD
+    d2: 2D
+    _d1: background GD
+    _d2: background 2D
+    """
+  
+   
 
-    from matplotlib.ticker import MultipleLocator
-    get_ipython().run_line_magic('reload_ext', 'autoreload')
-    get_ipython().run_line_magic('autoreload', '2')
-    get_ipython().run_line_magic('pylab', 'inline')
-    import sys
-    from lmfit import Parameters, minimize
-    import pandas as pd # python data manipulation and analysis library
-    import numpy as np #  Library with large collection of high-level mathematical functions to operate on arrays
-    import matplotlib.pyplot as plt #python plotting library
-    import peakutils #baselining library
+    counter=i
+    
+    fit=[]
 
-    import os, glob, csv
- # Library with operating system dependent functionality. Example: Reading data from files on the computer
-    bg1=pd.read_csv("background1D.csv")
-    bg2=pd.read_csv("background2D.csv")
-#     fn1 =pd.read_csv("foreground1D.csv")
-#     fn2 = pd.read_csv("foreground2D.csv")
-    fn1=pd.read_csv("Point "+str(counter)+" foreground1D.csv")
-    fn2=pd.read_csv("Point "+str(counter)+" foreground2D.csv")
+    d1 = pd.read_csv("Point "+str(counter)+" foreground1D.csv")
+    d2 = pd.read_csv("Point "+str(counter)+" foreground2D.csv")
+    _d1 = pd.read_csv("background1D.csv")
+    _d2 = pd.read_csv("background2D.csv")
+    
 
+    
     # d1 = pd.read_csv(fn1)
-    d1 = fn1
+    d1 = d1
     # d1_ = pd.read_csv(bg1)
-    d1_= bg1
+    d1_= _d1
     d1['I'] = d1['I']-d1_['I']
     base1 = peakutils.baseline(d1['I'], 1)
     d1['I_base']= d1['I']-base1
-    d1 = d1[(d1['W']>1250) & (d1['W']<1750)]
+    d1 = d1[(d1['W']>1220) & (d1['W']<1750)]
 
     # d2 = pd.read_csv(fn2)
-    d2 = fn2
+    d2 = d2
     # d2_ = pd.read_csv(bg2)
-    d2_= bg2
+    d2_= _d2
     d2['I'] = d2['I']-d2_['I']
+    d2 = d2[(d2['W']>2550) & (d2['W']<2850)]
+    d2= d2[(np.abs(stats.zscore(d2))<3).all(axis=1)]
     base2 = peakutils.baseline(d2['I'], 1)
     d2['I_base'] = d2['I']-base2
-    d2 = d2[(d2['W']>2600) & (d2['W']<2850)]
+    
 
     def PseudoVoigtFunction(WavNr, Pos, Amp, GammaL, FracL):
         SigmaG = GammaL / np.sqrt(2*np.log(2)) # Calculate the sigma parameter  for the Gaussian distribution from GammaL (coupled in Pseudo-Voigt)
@@ -619,25 +655,32 @@ def ration(m1,m2,counter):
             return (model - data)
         return (model - data)/eps # with errors, the difference is ponderated
 
-    def two_pv(pars, x, data=None, eps=None): #Function definition
+    def three_pv(pars, x, data=None, eps=None): #Function definition
         # unpack parameters, extract .value attribute for each parameter
         a1 = pars['a1'].value
         c1 = pars['c1'].value
         s1 = pars['s1'].value
         f1 = pars['f1'].value
-
+        
+        a4 = pars['a4'].value
+        c4 = pars['c4'].value
+        s4 = pars['s4'].value
+        f4 = pars['f4'].value
+        
         a2 = pars['a2'].value
         c2 = pars['c2'].value
         s2 = pars['s2'].value
         f2 = pars['f2'].value
+        
 
         peak1 = PseudoVoigtFunction(x.astype(float), c1, a1, s1, f1)
+        peak3 = PseudoVoigtFunction(x.astype(float), c4, a4, s4, f4)
         peak2 = PseudoVoigtFunction(x.astype(float), c2, a2, s2, f2)
 
-        model =  peak1 + peak2  # The global model is the sum of the Gaussian peaks
+        model =  peak1 + peak3 + peak2  # The global model is the sum of the Gaussian peaks
 
         if data is None: # if we don't have data, the function only returns the direct calculation
-            return model, peak1, peak2
+            return model, peak1, peak3, peak2
         if eps is None: # without errors, no ponderation
             return (model - data)
         return (model - data)/eps # with errors, the difference is ponderated
@@ -650,6 +693,10 @@ def ration(m1,m2,counter):
                  ('c1',   1350,   True,  1330, 1370,  None),
                  ('s1',     20,   True,    10,   200,  None),  # 200 so that we get proper fit width of unpatterned peak 
                  ('f1',    0.5,   True,  0, 1,  None),
+                 ('a4',    1 ,   True,     0, None,  None), # peak middle of GD
+                 ('c4',   1500,   True,  1480, 1520,  None),
+                 ('s4',     20,   True,    10,   200,  None),  
+                 ('f4',    0.5,   True,  0, 1,  None),
                  ('a2',      1,   True,     0, None,  None),
                  ('c2',    1600,   True, 1560,  1640,  None),
                  ('s2',     20,   True,    10,   200,  None),
@@ -667,49 +714,56 @@ def ration(m1,m2,counter):
 
     x = d1['W']
     y = d1['I_base']
-    out = minimize(two_pv, ps1, method = 'leastsq', args=(x, y))
+    out = minimize(three_pv, ps1, method = 'leastsq', args=(x, y))
 
     x2 = d2['W']
     y2 = d2['I_base']
     out2 = minimize(one_pv, ps2, method = 'leastsq', args=(x2, y2))
 
-    f, (ax,ax2)=plt.subplots(1,2,sharey=True, gridspec_kw = {'width_ratios':[2.5, 1]})
-    f.subplots_adjust(wspace=0.1)
+#     f, (ax,ax2)=plt.subplots(1,2,sharey=True, gridspec_kw = {'width_ratios':[2.5, 1]})
+#     f.subplots_adjust(wspace=0.1)
 
-    ax.xaxis.set_major_locator(MultipleLocator(200))
-    ax2.xaxis.set_major_locator(MultipleLocator(200))
+#     ax.xaxis.set_major_locator(MultipleLocator(200))
+#     ax2.xaxis.set_major_locator(MultipleLocator(200))
 
-    ax.set_yticklabels([])
+#     ax.set_yticklabels([])
 
-    ax.plot(x,y,'-',label='measured',)
-    ax.plot(x,two_pv(out.params, x)[0],label='fit')
-    ax2.plot(x2,y2,'-')
-    ax2.plot(x2,one_pv(out2.params, x2)[0])
+#     ax.plot(x,y,'-',label='measured',)
+#     ax.plot(x,three_pv(out.params, x)[0],label='fit')
+#     ax.plot(x,three_pv(out.params, x)[1],label='fit')
+#     ax.plot(x,three_pv(out.params, x)[2],label='fit')
+#     ax.plot(x,three_pv(out.params, x)[3],label='fit')
+# #     ax.plot(x,four_pv(out.params, x)[4],label='fit')
+#     ax2.plot(x2,y2,'-')
+#     ax2.plot(x2,one_pv(out2.params, x2)[0])
 
-    f.text(0.05, 0.5, 'Intensity [a.u.]', va='center', rotation='vertical', fontsize=16)
-    f.text(0.5, 0.01, 'Raman shift [cm$^{-1}$]', ha='center', rotation='horizontal',fontsize=16)
+#     f.text(0.05, 0.5, 'Intensity [a.u.]', va='center', rotation='vertical', fontsize=16)
+#     f.text(0.5, 0.01, 'Raman shift [cm$^{-1}$]', ha='center', rotation='horizontal',fontsize=16)
 
     # hide the spines between ax and ax2
-    ax.spines['right'].set_visible(False)
-    ax2.spines['left'].set_visible(False)
-    ax.yaxis.tick_left()
-    # ax.tick_params(labelright='off')  # don't put tick labels at the top
-    ax2.yaxis.tick_right()
-    # ax.yaxis.label('test')
+#     ax.spines['right'].set_visible(False)
+#     ax2.spines['left'].set_visible(False)
+#     ax.yaxis.tick_left()
+#     # ax.tick_params(labelright='off')  # don't put tick labels at the top
+#     ax2.yaxis.tick_right()
+#     # ax.yaxis.label('test')
 
-    d = .02  # how big to make the diagonal lines in axes coordinates
-    # arguments to pass to plot, just so we don't keep repeating them
-    kwargs = dict(transform=ax.transAxes, color='k', clip_on=False)
-    ax.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)        # top-left diagonal
-    ax.plot((1 - d, 1 + d), (-d, + d), **kwargs)  # top-right diagonal
+#     d = .02  # how big to make the diagonal lines in axes coordinates
+#     # arguments to pass to plot, just so we don't keep repeating them
+#     kwargs = dict(transform=ax.transAxes, color='k', clip_on=False)
+#     ax.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)        # top-left diagonal
+#     ax.plot((1 - d, 1 + d), (-d, + d), **kwargs)  # top-right diagonal
 
-    kwargs.update(transform=ax2.transAxes)  # switch to the bottom axes
-    ax2.plot((- d, + d), (- d, + d), **kwargs)  # bottom-left diagonal
-    ax2.plot((- d, + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
+#     kwargs.update(transform=ax2.transAxes)  # switch to the bottom axes
+#     ax2.plot((- d, + d), (- d, + d), **kwargs)  # bottom-left diagonal
+#     ax2.plot((- d, + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 
     # ax.legend(loc='upper right')
-    # plt.savefig(p/'Raman_raw_111.png', format='png', dpi=300)
-    plt.show()
+#     plt.savefig(p/'Raman_raw_111.png', format='png', dpi=300)
+#     plt.savefig(r'C:\Users\UWAdmin\Desktop\AIM-Lab-Automation-master\AIM-Lab-Automation-master\codes\Campaign 2020-10-11\fg\fig\graphene spot ' + str(i+1) + '.png')
+#     plt.clf()
+#     plt.savefig(r'C:\Users\UWAdmin\Desktop\AIM-Lab-Automation-master\AIM-Lab-Automation-master\codes\Campaign 2020-10-11\figures of the experiments')
+#     plt.show()
 
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
     df2 = pd.DataFrame({key: [par.value] for key, par in out2.params.items()})
@@ -724,81 +778,41 @@ def ration(m1,m2,counter):
 
     if df['s3'].values > 120:
         df[['a3','c3','s3','f3']] = 0
-
-    df.columns= ['D','PD','WD','FD','G','PG','WG','FG','2D','P2D','W2D','F2D']
+        
+    df.columns= ['D','PD','WD','FD','D1','PD1','WD1','FD1','G','PG','WG','FG','2D','P2D','W2D','F2D']
+   
     df['GD']=df['G']/df['D']
     df['2DG']=df['2D']/df['G']
-#     ml_file = pd.read_csv("dataset-2.csv")
-#     ml_file.set_value(counter, "ratio", df['GD'].values)
-#     ml_file.to_csv("dataset-2.csv", index=False)  
 
-    if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
+#     df.to_csv('fits.csv',mode = 'a',index=False)
+#     print (df)
+    se=[df['D'].values[0],df['PD'].values[0],df['WD'].values[0],df['FD'].values[0],df['D1'].values[0],\
+        df['PD1'].values[0],df['WD1'].values[0],df['FD1'].values[0],df['G'].values[0],\
+       df['PG'].values[0],df['WG'].values[0],df['FG'].values[0],df['2D'].values[0],\
+        df['P2D'].values[0],df['W2D'].values[0],df['F2D'].values[0]]
+    
+#     if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
 
+#         print("patterning not done")
+   
+    if df['WD'].values>120:
+        if (df['D'].values>.3*df['G'].values or df['D1'].values > df['D'].values):
+            print("patterning not done")
+    elif (df['WG'].values>120):
         print("patterning not done")
-
-        data=pd.read_csv('dataset-2.csv')
-        p=data['power']
-        t=data['time']
-       
-        import csv
-        if counter==0 or counter==1:
-            toAdd = [p[counter],t[counter]]
-            filename="dataset-2.csv"
-            with open(filename, "r") as infile:
-                reader = list(csv.reader(infile))
-                reader.insert(counter+1, toAdd)
-
-            with open(filename, "w", newline='') as outfile:
-                writer = csv.writer(outfile)
-                for line in reader:
-                    writer.writerow(line)
-  
-
-
-
-            df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
-   
-        else:
-            if p[counter]==p[counter-1] and p[counter-1]==p[counter-2] and t[counter]==t[counter-1] and t[counter-1]==t[counter-2]:
-                print("No shifting will take place")
-                ml_file = pd.read_csv("dataset-2.csv")
-                ml_file.set_value(counter, "ratio", 0)
-                ml_file.to_csv("dataset-2.csv", index=False) 
-            else:
-                toAdd = [p[counter],t[counter]]
-                filename="dataset-2.csv"
-                with open(filename, "r") as infile:
-                    reader = list(csv.reader(infile))
-                    reader.insert(counter+1, toAdd)
-
-                with open(filename, "w", newline='') as outfile:
-                    writer = csv.writer(outfile)
-                    for line in reader:
-                        writer.writerow(line)
-   
-
-
-
-            df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
+    
     else:
-        ml_file = pd.read_csv("dataset-2.csv")
+        
+        ml_file = pd.read_csv(r"C:\Users\UWAdmin\Desktop\AIM-Lab-Automation-master\AIM-Lab-Automation-master\codes\Campaign 2020-10-28\dataset.csv")
         ml_file.set_value(counter, "ratio", df['GD'].values)
-        ml_file.to_csv("dataset-2.csv", index=False)  
-        plot_file= pd.read_csv("plot_data.csv")
-        plot_file.set_value(counter,"ratio", df['GD'].values)
-        plot_file.to_csv("plot_data.csv", index=False)
-        df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
-        p=df['GD']
-        twoGD=df['2DG']
-        twoD=df['2D']
-        G=df['G']
-        WD=df['WD']
-        WG=df['WG']
-        return p
-       # return p,twoGD,twoD,G,WD,WG
-#         if __name__ == "__main__":
-#             """optional location for parameters"""
-#             print(" ")
+        ml_file.to_csv("dataset.csv", index=False)  
+#         plot_file= pd.read_csv("plot_data.csv")
+#         plot_file.set_value(counter,"ratio", df['GD'].values)
+#         plot_file.to_csv("plot_data.csv", index=False)
+#         df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
+   
+    
+    return df['GD'].values[0] 
 
 def ration2(m1,m2,counter):
     get_ipython().run_line_magic('reload_ext', 'autoreload')
@@ -843,6 +857,8 @@ def ration2(m1,m2,counter):
     base2 = peakutils.baseline(d2['I'], 1)
     d2['I_base'] = d2['I']-base2
     d2 = d2[(d2['W']>2600) & (d2['W']<2850)]
+    base2 = peakutils.baseline(d2['I'], 1)
+    d2['I_base'] = d2['I']-base2
 
     def PseudoVoigtFunction(WavNr, Pos, Amp, GammaL, FracL):
         SigmaG = GammaL / np.sqrt(2*np.log(2)) # Calculate the sigma parameter  for the Gaussian distribution from GammaL (coupled in Pseudo-Voigt)
