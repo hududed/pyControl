@@ -420,12 +420,6 @@ def capture_photo(begin,exp_no,line,iii):
 #                     print(".spe file not found...")
                   print(" ")
 
-#                 print(String.Format("{0} {1}",
-#                                     "Image saved to",
-#                                     experiment.GetValue(
-#                                         ExperimentSettings.
-#                                         FileNameGenerationDirectory)))  
-
 
                 wl= experiment.SystemColumnCalibration
                 wavelength=np.zeros((1,1340))
@@ -470,9 +464,7 @@ def capture_photo(begin,exp_no,line,iii):
                 experiment.SetValue(setting, value)
 
         def experiment_completed(sender, event_args):    
-#             print("Experiment Completed")    
-            # Sets the state of the event to signaled,
-            # allowing one or more waiting threads to proceed.
+
             acquireCompleted.Set()
        
 
@@ -485,7 +477,6 @@ def capture_photo(begin,exp_no,line,iii):
             #x=int(input())
             set_value(CameraSettings.ShutterTimingExposureTime,3000)
             #print("Please Enter the Number of Frames")
-            #y=int(input())
             experiment.SetValue(ExperimentSettings.AcquisitionFramesToStore,5)
             for k in range(1,3):
                 if k==1:
@@ -543,12 +534,6 @@ def capture_photo(begin,exp_no,line,iii):
 #                     print(".spe file not found...")
                   print(" ")
 
-#                 print(String.Format("{0} {1}",
-#                                     "Image saved to",
-#                                     experiment.GetValue(
-#                                         ExperimentSettings.
-#                                         FileNameGeneDirectory)))  
-
 
                 wl= experiment.SystemColumnCalibration
                 wavelength=np.zeros((1,1340))
@@ -572,8 +557,6 @@ def capture_photo(begin,exp_no,line,iii):
                     inten.append(intensity[0,x])
                 import csv
                 m="line "+ str(line)+" Before Point "+str(exp_no)+" iteration "+str(iii)+" foreground"+str(k)+"D.csv"
-                #m="line "+ str(line)+" Before Point "+str(exp_no)+" foreground"+str(k)+"iteration "+str(iii)+"D.csv"
-#                 m="line "+ str(line)+" Point "+str(exp_no)+" foreground"+str(k)+"D.csv"
                 with open(m, 'w', newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow(["W", "I"])
@@ -749,9 +732,7 @@ def ration(a,b,i,line,iii):
        df['PG'].values[0],df['WG'].values[0],df['FG'].values[0],df['2D'].values[0],\
         df['P2D'].values[0],df['W2D'].values[0],df['F2D'].values[0]]
     
-#     if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
 
-#         print("patterning not done")
    
     if df['WD'].values>120:
         if (df['D'].values>.3*df['G'].values or df['D1'].values > df['D'].values):
@@ -765,21 +746,13 @@ def ration(a,b,i,line,iii):
         df3.loc[a[0],'ratio']=0
         df3.to_csv('dataset.csv',index=False)
     
-    elif mean(d1[d1['W']<1255]['I_base']) > 0.7*mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base'])\
-        or mean(d1[(d1['W']>1400) & (d1['W']<1550)]['I_base']) > 0.7*mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base']):
+    
+    elif np.mean(d1[d1['W']<1255]['I_base']) > 0.7*np.mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base'])\
+        or np.mean(d1[(d1['W']>1400) & (d1['W']<1550)]['I_base']) > 0.7*np.mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base']):
         print("patterning not done")
     
     else:
-        
-#         ml_file = pd.read_csv(r"C:\Users\UWAdmin\line stuff\Campaign 2020-11-27\dataset.csv")
-#         ml_file.set_value(counter, "ratio", df['GD'].values)
-#         ml_file.to_csv("dataset.csv",mode='a', index=False)  
-#         plot_file= pd.read_csv("plot_data.csv")
-#         plot_file.set_value(counter,"ratio", df['GD'].values)
-#         plot_file.to_csv("plot_data.csv", index=False)
-#         df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
-   
-    
+
         df3=pd.read_csv('dataset.csv')
         df3['ratio'].replace(' ',np.nan, inplace=True)
         df4=df3.dropna(subset=["ratio"])
@@ -809,9 +782,6 @@ def ration2(m1,m2,counter,line,iii):
  # Library with operating system dependent functionality. Example: Reading data from files on the computer
     bg1=pd.read_csv("background1D.csv")
     bg2=pd.read_csv("background2D.csv")
-#     fn1 =pd.read_csv("foreground1D.csv")
-#     fn2 = pd.read_csv("foreground2D.csv")
-    # m="line "+ str(line)+" Before Point "+str(exp_no)+str(k)+"iteration "+str(iii)+" foreground"+"D.csv"
 
     d1=pd.read_csv("line "+ str(line)+" Before Point "+str(counter)+" iteration "+str(iii)+" foreground1D.csv")
     d2=pd.read_csv("line "+ str(line)+" Before Point "+str(counter)+" iteration "+str(iii)+" foreground2D.csv")
@@ -951,17 +921,13 @@ def ration2(m1,m2,counter,line,iii):
     df['GD']=df['G']/df['D']
     df['2DG']=df['2D']/df['G']
 
-#     df.to_csv('fits.csv',mode = 'a',index=False)
-#     print (df)
+
     se=[df['D'].values[0],df['PD'].values[0],df['WD'].values[0],df['FD'].values[0],df['D1'].values[0],\
         df['PD1'].values[0],df['WD1'].values[0],df['FD1'].values[0],df['G'].values[0],\
        df['PG'].values[0],df['WG'].values[0],df['FG'].values[0],df['2D'].values[0],\
         df['P2D'].values[0],df['W2D'].values[0],df['F2D'].values[0]]
     
-#     if (df['WD'].values>120 and df['D'].values>.5*df['G'].values) or df['WG'].values>120:
-
-#         print("patterning not done")
-   
+  
     if df['WD'].values>120:
         if (df['D'].values>.3*df['G'].values or df['D1'].values > df['D'].values):
             print("patterning not done")
@@ -975,15 +941,7 @@ def ration2(m1,m2,counter,line,iii):
         df3.to_csv('dataset.csv',index=False)
     
     else:
-        
-#         ml_file = pd.read_csv(r"C:\Users\UWAdmin\line stuff\Campaign 2020-11-27\dataset.csv")
-#         ml_file.set_value(counter, "ratio", df['GD'].values)
-#         ml_file.to_csv("dataset.csv",mode='a', index=False)  
-#         plot_file= pd.read_csv("plot_data.csv")
-#         plot_file.set_value(counter,"ratio", df['GD'].values)
-#         plot_file.to_csv("plot_data.csv", index=False)
-#         df.to_csv("fit.csv",encoding='utf-8',header=False,index=False)
-   
+
     
         df3=pd.read_csv('dataset-pre.csv')
         df3['ratio'].replace(' ',np.nan, inplace=True)
