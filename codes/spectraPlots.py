@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+## This code is used for post
+
 def ration(m1, m2, counter):
     get_ipython().run_line_magic('reload_ext', 'autoreload')
     get_ipython().run_line_magic('autoreload', '2')
@@ -178,7 +180,7 @@ def ration(m1, m2, counter):
 
     # plt.plot(x2,y2)
     import os
-    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97') # How is this related to the path in spectraPlots.py
     #if i==0:os.mkdir('figures of the experiments')
     os.chdir('figures of the experiments')
     plt.savefig('Graphene spot ' + str(i) + '.png')
@@ -194,7 +196,7 @@ def ration(m1, m2, counter):
     # plt.plot(x2,y2)
     plt.savefig('Graphene 2D spot ' + str(i) + '.png')
     plt.clf()
-    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97')
+    os.chdir(r'C:\Users\labuser\old sample spectra column 48 to 97') # How is this related to the path in spectraPlots.py
 
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
     df2 = pd.DataFrame({key: [par.value] for key, par in out2.params.items()})
