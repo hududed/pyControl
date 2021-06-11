@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
-
-
 def ration(m1, m2, counter):
     get_ipython().run_line_magic('reload_ext', 'autoreload')
     get_ipython().run_line_magic('autoreload', '2')
@@ -277,6 +274,3 @@ def ration(m1, m2, counter):
         WD = df['WD']
         WG = df['WG']
         return p, twoGD, twoD, G, WD, WG
-
-
-# In[ ]:
