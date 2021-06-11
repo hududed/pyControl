@@ -4,7 +4,6 @@ import peakutils #baselining library
 from matplotlib.ticker import MultipleLocator
 from scipy.optimize import curve_fit
 from pathlib import *
-#import mplcursors
 from lmfit import Parameters, minimize
 from scipy import stats
 
