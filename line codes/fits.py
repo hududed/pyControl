@@ -3,10 +3,8 @@ import pandas as pd,numpy as np, matplotlib.pyplot as plt,os,glob
 import peakutils #baselining library
 from matplotlib.ticker import MultipleLocator
 from scipy.optimize import curve_fit
-import csv
 from pathlib import *
 import mplcursors
-from sklearn import preprocessing
 from lmfit import Parameters, minimize
 from scipy import stats
 
@@ -19,8 +17,6 @@ def new_plot_LIG(d1,d2,d1_,d2_,e,line_number):
     get_ipython().run_line_magic('pylab', 'inline')
     get_ipython().run_line_magic('matplotlib', 'inline')
     
-
-    # d1_ = pd.read_csv(bg1)
     
     d1['I'] = d1['I']-d1_['I']
     base1 = peakutils.baseline(d1['I'], 1)
