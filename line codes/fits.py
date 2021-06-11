@@ -1,47 +1,17 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[7]:
-
-
-import pandas as pd # python data manipulation and analysis library
-import numpy as np #  Library with large collection of high-level mathematical functions to operate on arrays
-import matplotlib.pyplot as plt #python plotting library
+import pandas as pd,numpy as np, matplotlib.pyplot as plt,os,glob
 import peakutils #baselining library
 from matplotlib.ticker import MultipleLocator
 from scipy.optimize import curve_fit
-import os,glob
- # Library with operating system dependent functionality. Example: Reading data from files on the computer
-
 import csv
 from pathlib import *
 import mplcursors
-
 from sklearn import preprocessing
-
 from lmfit import Parameters, minimize
 from scipy import stats
-# import re
 
 
-# In[ ]:
-
-
-# import os
-# # os.mkdir(r'line stuff')
-# os.chdir(r'C:\Users\UWAdmin\line stuff')
-
-
-# In[2]:
-
-
-
-
-
-# In[27]:
-
-
-def new_plot_LIG(d1,d2,_d1,_d2,e,line_number):
+def new_plot_LIG(d1,d2,d1_,d2_,e,line_number):
    
   
     get_ipython().run_line_magic('reload_ext', 'autoreload')
@@ -49,28 +19,14 @@ def new_plot_LIG(d1,d2,_d1,_d2,e,line_number):
     get_ipython().run_line_magic('pylab', 'inline')
     get_ipython().run_line_magic('matplotlib', 'inline')
     
-    """Plots LIG BEFORE PATTERN and get saves fits as fits.csv
-    Plots currently saved manually.
-    TO-DO: save each plot directly from this function
-    d1: GD
-    d2: 2D
-    _d1: background GD
-    _d2: background 2D
-    """
 
-    # d1 = pd.read_csv(fn1)
-    d1 = d1
     # d1_ = pd.read_csv(bg1)
-    d1_= _d1
+    
     d1['I'] = d1['I']-d1_['I']
     base1 = peakutils.baseline(d1['I'], 1)
     d1['I_base']= d1['I']-base1
     d1 = d1[(d1['W']>1220) & (d1['W']<1750)]
 
-    # d2 = pd.read_csv(fn2)
-    d2 = d2
-    # d2_ = pd.read_csv(bg2)
-    d2_= _d2
     d2['I'] = d2['I']-d2_['I']
     d2 = d2[(d2['W']>2550) & (d2['W']<2850)]
     
@@ -233,14 +189,10 @@ def new_plot_LIG(d1,d2,_d1,_d2,e,line_number):
     df['2DG']=df['2D']/df['G']
     if np.mean(d1[d1['W']<1255]['I_base']) > 0.7*np.mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base'])        or np.mean(d1[(d1['W']>1400) & (d1['W']<1550)]['I_base']) > 0.7*np.mean(d1[(d1['W']>1340) & (d1['W']<1350)]['I_base']):
         print("patterning not done")
-#     df.to_csv('fits.csv',mode = 'a',index=False)
-#     print (df)
+
     se=[df['D'].values[0],df['PD'].values[0],df['WD'].values[0],df['FD'].values[0],df['D1'].values[0],        df['PD1'].values[0],df['WD1'].values[0],df['FD1'].values[0],df['G'].values[0],       df['PG'].values[0],df['WG'].values[0],df['FG'].values[0],df['2D'].values[0],        df['P2D'].values[0],df['W2D'].values[0],df['F2D'].values[0]]
     
     return df['G'],df['D']
-
-
-# In[5]:
 
 
 
