@@ -8,7 +8,7 @@ from lmfit import Parameters, minimize
 from scipy import stats
 
 
-def new_plot_LIG(d1,d2,d1_,d2_,e,line_number):
+def new_plot_LIG(d1,d2,d1_,d2_,spot_number,iteration,line_number): #Line 3 Spot 4 Iteration 0 , here spot_number=4 and iteration=0
    
   
     get_ipython().run_line_magic('reload_ext', 'autoreload')
@@ -161,7 +161,7 @@ def new_plot_LIG(d1,d2,d1_,d2_,e,line_number):
     # ax.legend(loc='upper right')
 #     plt.savefig(p/'Raman_raw_111.png', format='png', dpi=300)
     #plt.show()
-    cc="Line "+str(line_number)+" Point number " + str(e)
+    cc="Line "+str(line_number)+" Point number " +str(spot_number) + " iteration number "+ str(iteration)
     mm=cc+".png"
     plt.savefig(mm,dpi=200)
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
