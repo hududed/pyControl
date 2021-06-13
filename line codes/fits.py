@@ -8,8 +8,7 @@ from pathlib import *
 from lmfit import Parameters, minimize
 from scipy import stats
 
-
-def new_plot_LIG(d1, d2, d1_, d2_, spot_number, line_number):
+def new_plot_LIG(d1, d2, d1_, d2_, spot_number, iteration, line_number):
     """Makes a Raman plot with fits at the 1500 and 2700cm-1 regions
         d1 : foreground plot at 1500cm-1, d2 : foreground plot at 2700cm-1
         d1_: background plot at 1500cm-1, d2_: background plot at 2700cm-1
@@ -167,7 +166,7 @@ def new_plot_LIG(d1, d2, d1_, d2_, spot_number, line_number):
     # ax.legend(loc='upper right')
 #     plt.savefig(p/'Raman_raw_111.png', format='png', dpi=300)
     # plt.show()
-    cc = "Line "+str(line_number)+" Point number " + str(spot_number)
+    cc="Line "+str(line_number)+" Point number " +str(spot_number) + " iteration number "+ str(iteration)
     mm = cc+".png"
     plt.savefig(mm, dpi=200)
     df1 = pd.DataFrame({key: [par.value] for key, par in out.params.items()})
