@@ -8,7 +8,6 @@ from pathlib import *
 from lmfit import Parameters, minimize
 from scipy import stats
 
-
 def new_plot_LIG(d1, d2, d1_, d2_, spot_number, iteration, line_number):
     """Makes a Raman plot with fits at the 1500 and 2700cm-1 regions
         d1 : foreground plot at 1500cm-1, d2 : foreground plot at 2700cm-1
