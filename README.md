@@ -25,28 +25,4 @@ The primary aim is to develop a program to allow the user design the experiment 
 
 2. Velocity control for line patterning.
 
-## HOW-TO  
-1. Git clone this repo to your local machine.  
-2. Create a new virtual environment, activate it and install requirements.  
-3.  Run notebook `pyControl/Updated Codes/main program.ipynb`. 
-   (https://github.com/hududed/pyControl/blob/master/codes/main%20program.ipynb)
-   -->Inside current directory, a new folder will be created as "Campaign " + "Current Date" . In this folder 
-      experimental data will be recorded.
-   --> Parameters will be written at `directory/campaign_current_date/dataset.csv`. (TO-DO: fixed paths)  
-4. Imports pressure, IsoPlane Spectrometer, Motion Controller, Flipper Mirror and Laser files. 
-5. Run main program.  
-6. Set start `(x1,y1)`, end coordinates `(x2,y2)` and intervals `(dx,dy)`.  
-7. Following outputs are written to `results`: (TO-DO: fixed paths)  
-    - Background1D and Background2D csv files are created. The center wavelengths are 1500 and 2700. 
-    - Two Raw Raman spectrum files `foreground1D.csv` and `foreground2D.csv` for each pattern.   
-    - One updated file for MBO `dataset.csv` with each pattern as newline,  
-    - the optimizer model opt.state.rds are saved at `directory/campaign_current_date/'
-    - All the csv files for foreground and background 1D, 2D are saved at `directory/campaign_current_date/'.
-     
-## Line-Patterning
-1. Define threads: (a) motion controller thread (b) mirror switching thread
-2. Prepare initial data: 
-    - dataset.csv contains post patterning spots raman spectra data
-	- dataset-pre.csv contains pre patterning spots raman spectra data
-	- data.csv contains only one data for one line and this file interacts with BO.
-3. Assign number of lines to be patterned, starting position in x axis, starting position in y axis, vertical gap between the lines.
+The LRPC_Implementations folder is for rapid testing of different design panterns and parametric settings, which is it's distinction above pycontol. The LRPC Revisions are to be used for their 

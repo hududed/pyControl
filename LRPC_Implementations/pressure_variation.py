@@ -5,8 +5,7 @@ Created on Tue Feb  8 14:08:30 2022
 @author: UWAdmin
 """
 #%%
-
-import LRPC_Rev3 as LRPC
+import LRPC
 import time
 import numpy as np
 import random
@@ -147,15 +146,16 @@ powers = []
 times = []
 #%%
 fast_time = 2000
-# settings_set = [(1,450,2000), (2,525,2000), (3,600, 2000), (4,675,2000),  (5,750,2000)]*10
-# settings_set =  [(1,350,2000),(2,376.92307692,2000),(3,403.84615385,2000), (4,430.76923077,2000), (5,457.69230769, 2000), (6,484.61538462,2000),  (7,511.53846154,2000), (8,538.46153846,2000), (9,565.38461538,2000), (10,592.30769231, 2000), (11,619.23076923,2000),  (12,646.15384615,2000), (13,673.07692308,2000),  (14,700,2000)]
-# time_range = np.linspace(2000, 12000,12)
-power_range = np.linspace(250,700,12)
-# max_power = 1500
+time_range = np.linspace(2000, 12000,6)
+# power_range = np.linspace(1500,4000,12)
+power1 = 700
+power2 = 800
 # power_range = [357]*12
 settings_set = []
-for i in range(12):
-    settings_set.append((i, power_range[i],4000))
+for i in range(0,6):
+    settings_set.append((i, power1,time_range[i]))
+for i in range(6,12):
+    settings_set.append((i, power2,time_range[np.mod(i,6)]))
 #%%
 # random.shuffle(settings_set)
 shuffled_set = settings_set[0:12]
@@ -193,5 +193,5 @@ sc.pressure_control.to_ambient()
 
 print("Program Finished")
 print(f'Here is index:{index}')
-print(f'Here are the powers:{power_range}')
+# print(f'Here are the powers:{power_range}')
 # %%

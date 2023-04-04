@@ -6,9 +6,11 @@ Created on Tue Feb  8 14:08:30 2022
 """
 #%%
 
-import LRPC_Rev3 as LRPC
+import LRPC
 import time
 import numpy as np
+import random
+
 #%%
 
 #laser = LRPC.LaserSystemControl()
@@ -41,23 +43,24 @@ def set_power_line(power):
     print(f"\Setting Laser Power to: {power}")
     sc.set_line_power(power)
 
+#(power, time)
+pressure = 300
+sc.vacuum_air_and_fill_inert_gas(pressure,1)
 
 
-sc.vacuum_air_and_fill_inert_gas(120,1)
 
-
-
-def pattern_column(start_x,start_y, power_range):
+def pattern_column(start_x,start_y, power_range, time_range):
     line_length = 2
     print('Line Length = ', line_length)
-    setting_travel_time(2000)
+    
     add_position = 1
     line = 1
-    power_range = np.append(power_range,power_range[-1])
-    for pow in power_range:
+    # power_range = np.append(power_range,power_range[-1])
+    for i in range(len(power_range)):
         drawing_line(line)
-        pow = round(pow,2)
-        set_power_line(pow)
+        set_power_line(power_range[i])
+        setting_travel_time(time_range[i])
+        
         sc.move_stage_to_coordinates(start_x,start_y,2.5)
         sc.pattern_line(line_length,axis="X")
         start_y += add_position
@@ -65,14 +68,34 @@ def pattern_column(start_x,start_y, power_range):
         # sc.vacuum_air_and_fill_inert_gas(120,0.5)
         time.sleep(5)
 
-# power_test = np.linspace(250,1200,10)
-power_test = np.array([1094.44444444]*10)
-power_test_c1 = power_test[:5]
+
+index = []
+powers = []
+times = []
+settings_set = [(1,450,2000), (2,525,2000), (3,600, 2000), (4,675,2000),  (5,750,2000)]*10
+random.shuffle(settings_set)
+shuffled_set = settings_set[0:14]
+
+for s in shuffled_set:
+    i, p, t = s
+    index.append(i)
+    powers.append(p)
+    times.append(t)
+
+power_test = powers
+power_test_c1 = power_test[:len(power_test)//2]
 power_test_c2 = power_test[len(power_test)//2:]
 
-pattern_column(3,5,power_test_c1)
-sc.vacuum_air_and_fill_inert_gas(120,0.5)
-pattern_column(6,5,power_test_c2)
+times_test = times
+times_test_c1 = times_test[:len(power_test)//2]
+times_test_c2 = times_test[len(power_test)//2:]
+print(f'Here is index:{index}')
+
+
+
+pattern_column(3,5,power_test_c1, times_test_c1)
+sc.vacuum_air_and_fill_inert_gas(pressure,0.5)
+pattern_column(6,5,power_test_c2, times_test_c2)
 
 
 
@@ -83,8 +106,10 @@ pattern_column(6,5,power_test_c2)
 
 
 #%%
+sc.move_stage_to_coordinates(12,7,2.9)
 sc.power_off_laser()
 sc.pressure_control.to_ambient()
 
 print("Program Finished")
+print(f'Here is index:{index}')
 # %%

@@ -6,7 +6,7 @@ Created on Tue Feb  8 14:08:30 2022
 """
 #%%
 
-import LRPC_Rev3 as LRPC
+import LRPC
 
 
 #%%

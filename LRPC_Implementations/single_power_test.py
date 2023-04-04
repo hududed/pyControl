@@ -6,7 +6,7 @@ Created on Tue Feb  8 14:08:30 2022
 """
 #%%
 
-import LRPC_Rev3 as LRPC
+import LRPC
 import time
 import numpy as np
 #%%
@@ -26,7 +26,7 @@ vacuum_time = 0.15
 #%%
 start_x = 5
 start_y = 3
-sc.move_stage_to_coordinates(start_x,start_y,2.9)
+sc.move_stage_to_coordinates(start_x,start_y,2.5)
 sc.print_stage_positions()
 sc.power_on_laser()
 #%%
@@ -50,8 +50,8 @@ sc.vacuum_air_and_fill_inert_gas(120,1)
 def pattern_column(start_x,start_y, power_range):
     line_length = 2
     print('Line Length = ', line_length)
-    setting_travel_time(4000)
-    add_position = 1.5
+    setting_travel_time(2000)
+    add_position = 1
     line = 1
     power_range = np.append(power_range,power_range[-1])
     for pow in power_range:
@@ -65,7 +65,8 @@ def pattern_column(start_x,start_y, power_range):
         # sc.vacuum_air_and_fill_inert_gas(120,0.5)
         time.sleep(5)
 
-power_test = np.linspace(250,1200,10)
+# power_test = np.linspace(250,1200,10)
+power_test = np.array([1094.44444444]*10)
 power_test_c1 = power_test[:5]
 power_test_c2 = power_test[len(power_test)//2:]
 

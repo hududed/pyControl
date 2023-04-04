@@ -6,40 +6,69 @@ Created on Sat Dec 11 16:11:19 2021
 @author: Todd Muller
 @contact_email: todd.m.muller12@gmail.com
 """
+#%%
+import os, glob #import libraries
+import os 
+from pymeasure.instruments.lighthousephotonics import Sprout
 
+from threading import Thread
+import time
+from time import sleep
+from datetime import datetime, timedelta
 
+from random import randrange
 
+from newportxps import NewportXPS
 
+import numpy as np
+import pandas as pd
+from write_utils import write_data_files, get_mean, get_move_y, duplicate_to_dataset
 
+import numpy as np
+import csv
+        
+from flipper import mirror #import flipper mirror codes
+from spectra import capture_photo #import spectrometer codes
 
+from pathlib import Path
 
+# from spectra import *
+import spectra as IsoPlane
+
+# from pressure import close_valve,open_valve,close_all,current_pressure,gopr, to_ambient, to_vacuum, quick_fill
+import pressure as pressure_control
+from pymeasure.instruments.edwards import NXDS
+
+from fits import new_plot_LIG
+import threading
 
 #%% Import Libraries
 
-#Program and System Control Libraries
-import os 
-import threading
-import time
-from datetime import datetime, timedelta
-import numpy as np
-import pandas as pd
-import sys
+# #Program and System Control Libraries
+# import os 
+# import threading
+# import time
+# from datetime import datetime, timedelta
+# import numpy as np
+# import pandas as pd
+# import sys
+# import glob
 
-#Cell Control Libraries (e.g. position, pressure, mirrors)
-from newportxps import NewportXPS
-from flipper import mirror
-import pressure as pressure_control
-
-#from pymeasure.instruments.edwards import NXDS
-
-#Raman Device and Software Control Libraries
-import spectra as IsoPlane #import spectrometer codes
-
-#Laser Control Libraries
-from pymeasure.instruments.lighthousephotonics import Sprout
-from fits import new_plot_LIG
+# #Cell Control Libraries (e.g. position, pressure, mirrors)
+# from newportxps import NewportXPS
+# from flipper import mirror
 
 
+# #from pymeasure.instruments.edwards import NXDS
+
+# #Raman Device and Software Control Libraries
+# import spectra as IsoPlane #import spectrometer codes
+
+# #Laser Control Libraries
+# from pymeasure.instruments.lighthousephotonics import Sprout
+# from fits import new_plot_LIG
+
+# import pressure as pressure_control
 #%% Operational Setup
 os.getcwd() #get directory
 os.chdir(r'C:\Users\UWAdmin')
@@ -84,6 +113,11 @@ class SystemControl:
         
         #Connecting to Raman
         self._XPS = XPS
+        #self.GD_ratios = pd.DataFrame()
+        
+        #Defining instance variables
+        self.line_number = 0 #used to track number of lines printed per run
+        
 
     def reset_stage_position(self):
         self._XPS.kill_group('XYZ') #clear XYZ group
@@ -99,7 +133,7 @@ class SystemControl:
         positions = []
         for sname, _ in self._XPS.stages.items():
             positions.append(self._XPS.get_stage_position(sname))
-        self.x_position,self.y_position,self.z_position = positions
+        self.x_position, self.y_position, self.z_position = positions
     
     """PRESSURE CONTROL METHODS"""
     def connect_to_pump(self,resource_name='ASRL5::INSTR'):
@@ -113,8 +147,7 @@ class SystemControl:
     def decompress_to_pressure(self,final_pressure):
         for i in range(5): self.pressure_control.gopr(final_pressure)
         
-    def vacuum_air_and_fill_inert_gas(self,
-                                      final_pressure = 120, vacuum_time=1):
+    def vacuum_air_and_fill_inert_gas(self, final_pressure = 120, vacuum_time=1):
         
         print("Current Pressure: ",self.pressure_control.current_pressure())
         self.pressure_control.close_all()
@@ -135,6 +168,7 @@ class SystemControl:
             self.decompress_to_pressure(final_pressure)
         else:
             print("Current Pressure: ",vacuum_pressure)
+            self.power_off_laser()
             os.sys.exit("Vacuum not established!!!")
             
         print("Final Pressure")
@@ -156,6 +190,7 @@ class SystemControl:
         self.current_x_position=x
         self.current_y_position=y
         self.current_z_position=z
+        self.sync_stage_current_position()
         
 #        print("Stage moved to:\nx={}\ny={}\nz={}"\
 #              .format(x,y,z))
@@ -167,13 +202,9 @@ class SystemControl:
         self._laser.write("OPMODE=Off")
         
     def set_line_power(self, laser_power):
-        #lense polarization = 40
-        #self._laser.power = float((laser_power + 1.0135267540272)/0.063507/1000)
-        #lense polarization = 70
-        self._laser.power = float((laser_power + 5.748847522)/0.138859/1000)
-        #changed: 2022.01.28
-        #self._laser.power = ((laser_power+21.167)/0.1013)/1000
-        
+        # self._laser.power = (laser_power/0.0994)/1000
+        self._laser.power = (laser_power/0.2163)/1000
+
         
     
     def set_line_travel_time(self, line_travel_time=2000):
@@ -182,7 +213,64 @@ class SystemControl:
     
     """RAMAN CONTROL METHODS"""
     def initialize_LightField(self):
-       IsoPlane.capture_photo("start",2,1,0) #launch LightField software
+        print("Initializing LightField")
+        IsoPlane.capture_photo("start",2,1,0) #launch LightField software
+        exposure=1000
+        center_wavelength=1500
+        # input("Please confirm LightField application has properly started and that \
+        #       the following paraters have been properly set:\n\
+        #       Exposure: %f\n\
+        #       Center Wavelenth: %f\n\
+        #       (Press Enter on the Kernel to Confirm)\n" % 
+        #       (exposure, center_wavelength))
+        
+    def measure_raman(self):
+        self.line_length
+        check=[float(self._start_location)+
+               self.line_length/10*i for i in range(1,10)]
+          
+        
+        
+        for i in range(9):
+            
+            self._XPS.move_stage(self._axis, check[i])
+            self.print_stage_positions()
+            
+            for j in range(1):
+                self.flip_up_mirror()
+                print("post patterning...")
+                IsoPlane.capture_photo("on", i, self.line_number, j)
+                
+                self.flip_down_mirror()
+                time.sleep(5)
+                
+        one=[]
+        bg=[]
+        fit=[]
+        
+        
+        a="line "
+        b=str(i)+"*.csv"
+        c=a+b
+        for file in glob.glob(c):one.append(f"{file}")
+        for file in glob.glob("background*.csv"):bg.append(f"{file}")    
+        print(len(one))
+        
+        increment=0
+        line_number=i
+        for ix in range(int(len(one)/2)):
+            d1 = pd.read_csv(one[increment])
+            d2 = pd.read_csv(one[increment+1])
+            _d1 = pd.read_csv(bg[0])
+            _d2 = pd.read_csv(bg[1])
+            increment+=2
+            f=new_plot_LIG(d1,d2,_d1,_d2, ix, 0, line_number)
+            print(ix)
+            fit.append(f)
+            print("Here is the g/d that was scanned:")
+            print(f)
+        print("done")
+        
        
     def patterning_motion_control_thread(self): #This was formerly A2
         
@@ -195,7 +283,8 @@ class SystemControl:
         print("finished and current position is:\n")
         self.print_stage_positions()
 
-        
+
+
     def patterning_mirror_control_thread(self): #This was formerly B2
         
         for i in range(2):
@@ -219,41 +308,45 @@ class SystemControl:
                     time.sleep(self._trajectory_df['ramptime'][1]) #time for linear line
             else:
                 mirror('off')
-                print("mirror off")
-                    
-                
-    def pattern_line(self, line_length, line_axis="X"):
+                print("mirror off")     
+            
+    def pattern_line(self,line_length, axis="X"):
         print("Patterning is starting")
+        
+        #Track number of lines printed with this run
+        self.line_number = self.line_number + 1
+        
+        self.line_length = line_length
+        
+        if axis == "X":
+            self._start_location = self.x_position
+            self._stop_location = self.x_position + self.line_length
+            self._axis = 'XYZ.X'
+        elif axis == "Y":
+            self._start_location = self.y_position
+            self._stop_location = self.y_position + self.line_length
+            self._axis = 'XYZ.Y'
+        else:
+            print("Running X as default")
+            self._start_location = self.x_position
+            self._stop_location = self.x_position + self.line_length
+            self._axis = 'XYZ.X'
+        
         
         time.sleep(10)
         self.sync_stage_current_position()
-        
-        if line_axis=="X":
-            start_location = self.x_position
-            stop_location = self.x_position + line_length
-            axis = 'XYZ.X'
-        elif line_axis=="Y":
-            start_location = self.y_position
-            stop_location = self.y_position + line_length
-            axis = 'XYZ.Y'
-        else:
-            print("Running X as default")
-            start_location = self.x_position
-            stop_location = self.x_position + line_length
-            axis = 'XYZ.X'
-        
-        
+               
         #save_line_power = self._laser.power
         #self._laser.power = 0.01
         
         
         self.print_stage_positions()
         
-        self._XPS.define_line_trajectories(start=start_location,
-                                           stop=stop_location,
+        self._XPS.define_line_trajectories(start=self._start_location,
+                                           stop=self._stop_location,
                                            step=0.01,
                                            scantime=(self._line_travel_time/1000),
-                                           axis=axis[-1] #This gets just the last character of the string
+                                           axis=self._axis[-1] #This gets just the last character of the string
                                            )
         
         self._XPS.download_trajectory('foreward.trj')
@@ -270,7 +363,8 @@ class SystemControl:
         print(self._trajectory_df)
         
         line_ramping_distance = self._trajectory_df['rampdist'][0]
-        self._XPS.move_stage(axis, start_location-line_ramping_distance)
+        self._XPS.move_stage(self._axis, 
+                             self._start_location-line_ramping_distance)
         self._XPS.move_stage
         self.print_stage_positions()
         time.sleep(15) #sleep for 15 seconds       
@@ -303,17 +397,16 @@ class SystemControl:
         
         self.sync_stage_current_position()
                 
-        time.sleep(10)
+        # time.sleep(10)
                 
         print("\nLine Drawn")
         
-        self._XPS.move_stage(axis, stop_location)
-        self.sync_stage_current_position()
+        # self._XPS.move_stage(axis, self._stop_location)
+        # self.sync_stage_current_position()
         
         time.sleep(15)
         print("Line Finished\n\n")
-        
-        
+
         
         
         

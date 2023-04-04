@@ -6,12 +6,12 @@ Created on Tue Feb  8 14:08:30 2022
 """
 
 
-import LRPC_Rev2
+import LRPC
 
 
 #%%
 
-sc = LRPC_Rev2.SystemControl()
+sc = LRPC.SystemControl()
 
 sc.reset_stage_position()
 sc.print_stage_positions()

@@ -34,9 +34,6 @@ lp = laser_power_up()
 sc.reset_stage_position()
 sc.print_stage_positions()
 sc.connect_to_pump()
-# sc.pressure_control.to_ambient()
-# sc.pressure_control.to_ambient()
-
 
 scan_x = 4.5
 scan_y = 12
@@ -147,18 +144,12 @@ powers = []
 times = []
 #%%
 fast_time = 2000
-time_range = np.linspace(2000, 12000,6)
-# power_range = np.linspace(1500,4000,12)
-power1 = 700
-power2 = 800
-# power_range = [357]*12
+
+power_range = np.linspace(700,2600,12)
+
 settings_set = []
-for i in range(0,6):
-    settings_set.append((i, power1,time_range[i]))
-for i in range(6,12):
-    settings_set.append((i, power2,time_range[np.mod(i,6)]))
-#%%
-# random.shuffle(settings_set)
+for i in range(12):
+    settings_set.append((i, power_range[i],2000))
 shuffled_set = settings_set[0:12]
 
 for s in shuffled_set:
@@ -194,5 +185,5 @@ sc.pressure_control.to_ambient()
 
 print("Program Finished")
 print(f'Here is index:{index}')
-# print(f'Here are the powers:{power_range}')
+print(f'Here are the powers:{power_range}')
 # %%
