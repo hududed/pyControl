@@ -10,9 +10,7 @@ import LRPC
 
 #%%
 
-#laser = LRPC.LaserSystemControl()
-#raman = LRPC.RamanSpectrometerControl()
-#cell = LRPC.CellAndMirrorControl()
+
 
 sc = LRPC.SystemControl()
 

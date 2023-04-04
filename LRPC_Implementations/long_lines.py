@@ -13,39 +13,18 @@ import random
 
 #%%
 
-#laser = LRPC.LaserSystemControl()
-#raman = LRPC.RamanSpectrometerControl()
-#cell = LRPC.CellAndMirrorControl()
+
 
 sc = LRPC.SystemControl()
 
-# sc.initialize_LightField()
 
-# mirror('on')
-# laser_power.power=0.1
-# #Iterate for input to find z value
-# print("Enter z value (enter 0 when done):")
-# z=''
-# while z != 0:
-#     if z == '':
-#         z = float(input(':'))
-#     print(z)
-#     xps.move_stage('XYZ.Z', z)
-#     xps.move_stage('XYZ.X', 8)
-#     xps.move_stage('XYZ.Y', 7)
-#     z = float(input(':'))
-    
-# mirror('on')
-# pos_all()
-# while input('Is LightField Scan Stopped?:(yes/no)')!='yes':
-#     continue
 
 sc.reset_stage_position()
 sc.print_stage_positions()
 sc.connect_to_pump()
 
 vacuum_time = 0.15
-# sc.vacuum_air_and_fill_inert_gas(120,vacuum_time)
+
 #%%
 start_x = 5
 start_y = 3

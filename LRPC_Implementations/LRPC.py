@@ -44,29 +44,7 @@ import threading
 
 #%% Import Libraries
 
-# #Program and System Control Libraries
-# import os 
-# import threading
-# import time
-# from datetime import datetime, timedelta
-# import numpy as np
-# import pandas as pd
-# import sys
-# import glob
 
-# #Cell Control Libraries (e.g. position, pressure, mirrors)
-# from newportxps import NewportXPS
-# from flipper import mirror
-
-
-# #from pymeasure.instruments.edwards import NXDS
-
-# #Raman Device and Software Control Libraries
-# import spectra as IsoPlane #import spectrometer codes
-
-# #Laser Control Libraries
-# from pymeasure.instruments.lighthousephotonics import Sprout
-# from fits import new_plot_LIG
 
 # import pressure as pressure_control
 #%% Operational Setup

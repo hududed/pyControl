@@ -31,10 +31,6 @@ from PrincetonInstruments.LightField.AddIns import SpectrometerSettings
 
 import time
     
-# %reload_ext autoreload
-# %autoreload 2
-# %matplotlib inline
-# %pylab inline
 
 
 import pandas as pd # python data manipulation and analysis library

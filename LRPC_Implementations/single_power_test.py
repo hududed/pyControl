@@ -11,9 +11,6 @@ import time
 import numpy as np
 #%%
 
-#laser = LRPC.LaserSystemControl()
-#raman = LRPC.RamanSpectrometerControl()
-#cell = LRPC.CellAndMirrorControl()
 
 sc = LRPC.SystemControl()
 
