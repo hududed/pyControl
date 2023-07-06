@@ -1,52 +1,58 @@
 ## pyControl
+pyControl is a control system for scientific instruments. It is designed to control the following instruments:
 
-### Abstract
+- Newport XPS D4 XYZ controller
+- Thorlabs MFF101 Flip Mirror
+- Lighthouse Photonics Sprout G12W Laser
+- Princeton Instruments Isoplane SCT320 Raman
 
-The primary aim is to develop a program to allow the user design the experiment and the run the process independently. The program works in following fashion:
-1.	Setting laser parameters for patterning,
-2.	Setup surrogate model, initiate moving the XYZ stage,
-3. Auto adjust z axis of motion controller for each spot,
-4.	Start patterning,
-5. Acquiring Raman Data,
-6.	Raman Data Analysis and export,
-7. Update surrogate model, predict new candidates,
-8. Repeat process 2-7 until all the spots are patterned,
-9. Save the Optimizer model for post-analysis.
+Table of Contents
+1. Introduction
+2. Dependencies
+3. Usage
+4. Implementation
+5. Contributing
+6. License
 
-## Instruments:
-1. Newport ESP300 XYZ controller  
-2. Thorlabs MFF101 Flip Mirror  
-3. Lighthouse Photonics Sprout G12W Laser  
-4. Princeton Instruments Isoplane SCT320 Raman
+## Introduction
+The pyControl repository contains working code for controlling a variety of scientific instruments. It includes Bayesian optimization code and LRPC implementations for rapid testing of different design patterns and parametric settings. This repository is designed to be easily readable and customizable for scientific applications.
 
-**Current Challenge**
+## Dependencies
+The pyControl system requires the following dependencies:
 
-1. Update notebooks to python files.
+Python 3.6 or higher
+PyMeasure library
+numpy
+pandas
+scipy
+flipper
+spectra
+pressure
+To install the dependencies, run the following command:
 
-2. Velocity control for line patterning.
+In the terminal:
+`pip install pymeasure numpy pandas scipy flipper spectra pressure`
 
-## HOW-TO  
-1. Git clone this repo to your local machine.  
-2. Create a new virtual environment, activate it and install requirements.  
-3.  Run notebook `pyControl/Updated Codes/main program.ipynb`. 
-   (https://github.com/hududed/pyControl/blob/master/codes/main%20program.ipynb)
-   -->Inside current directory, a new folder will be created as "Campaign " + "Current Date" . In this folder 
-      experimental data will be recorded.
-   --> Parameters will be written at `directory/campaign_current_date/dataset.csv`. (TO-DO: fixed paths)  
-4. Imports pressure, IsoPlane Spectrometer, Motion Controller, Flipper Mirror and Laser files. 
-5. Run main program.  
-6. Set start `(x1,y1)`, end coordinates `(x2,y2)` and intervals `(dx,dy)`.  
-7. Following outputs are written to `results`: (TO-DO: fixed paths)  
-    - Background1D and Background2D csv files are created. The center wavelengths are 1500 and 2700. 
-    - Two Raw Raman spectrum files `foreground1D.csv` and `foreground2D.csv` for each pattern.   
-    - One updated file for MBO `dataset.csv` with each pattern as newline,  
-    - the optimizer model opt.state.rds are saved at `directory/campaign_current_date/'
-    - All the csv files for foreground and background 1D, 2D are saved at `directory/campaign_current_date/'.
-     
-## Line-Patterning
-1. Define threads: (a) motion controller thread (b) mirror switching thread
-2. Prepare initial data: 
-    - dataset.csv contains post patterning spots raman spectra data
-	- dataset-pre.csv contains pre patterning spots raman spectra data
-	- data.csv contains only one data for one line and this file interacts with BO.
-3. Assign number of lines to be patterned, starting position in x axis, starting position in y axis, vertical gap between the lines.
+## Usage
+To use the pyControl system, follow these steps:
+
+1. Connect the hardware devices to your computer as specified in the documentation for each device.
+2. Install the dependencies for the system (see Dependencies above).
+3. Open the implementation for the device you want to use (in the LRPC_Implementations folder) and run the code.
+4. Follow the instructions in the code to perform the desired scientific experiment.
+
+## Implementation
+The `line_codes` file is a working model of the Bayesian Optimization code. The `LRPC_Implementations` folder is for rapid testing of different design patterns and parametric settings, which distinguishes it from the `line_codes` implementation. The LRPC Revisions are to be used for rapid testing of parametric boundaries and design shapes. It stands apart from the `line_codes` folder in that it is an object-oriented implementation of the code, which increases the readability.
+
+## Contributing
+If you would like to contribute to the pyControl system, please follow these guidelines:
+
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Write tests for your changes.
+4. Make your changes and ensure all tests pass.
+5. Submit a pull request.
+
+## License
+The pyControl system is released under the Apache License.
+
