@@ -1,4 +1,5 @@
 import math
+
 import numpy as np
 
 
@@ -80,7 +81,7 @@ class ArcConverter:
         a = self.distance(x_end, y_end, x_center, y_center)
         b = self.distance(x_start, y_start, x_center, y_center)
         c = self.distance(x_end, y_end, x_start, y_start)
-        
+
         num = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
         den = 2 * a * b
         if den == 0:
@@ -100,38 +101,30 @@ class ArcConverter:
     returns the angle of an arc
     '''
     def arc_angle(self, x_start, y_start, x_end, y_end, x_center, y_center):
-        
         a = self.distance(x_end, y_end, x_center, y_center)
         b = self.distance(x_start, y_start, x_center, y_center)
         c = self.distance(x_end, y_end, x_start, y_start)
-            
+
         num = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
         den = 2 * a * b
         if den == 0:
-            return math.acos(np.round(0, 6)) * (180/math.pi)
+            return math.degrees(math.acos(np.round(0, 6)))
         div = num / den
         div *= -1
-        
-        #print('div: ', div)
 
         rad = math.acos(np.round(div, 6))
-        
-        #For now, I are assuming all angles are <= 180 degrees, so I am only using the calculation for the minor angle.  This may change later.
-        #print('angle: ', ((rad * (180/math.pi))))
-        return (rad * (180/math.pi))
+
+        # For now, I am assuming all angles are <= 180 degrees, so I am only using the calculation for the minor angle. This may change later.
+        return math.degrees(rad)
 
 
     def distance_from_arc_point_to_arc_center(self, arc_angle, arc_radius):
-        
         angle = arc_angle/2
-        
-        return math.sin(angle * (math.pi/180)) * arc_radius * 2
+        return math.sin(math.radians(angle)) * arc_radius * 2
 
 
     def distance(self, x1, y1, x2, y2):
-        xdist = math.pow((x2 - x1), 2)
-        ydist = math.pow((y2 - y1), 2)
-        return math.sqrt(xdist + ydist)
+        return math.hypot(x2 - x1, y2 - y1)
         
     
     def rotate_point(self, x_pos, y_pos, degree):
@@ -142,93 +135,42 @@ class ArcConverter:
         return rtrn
 
 
-    '''
-    x_start: the start x position
-    y_start: the start y position
-    x_end: the end x position
-    y_end: the end y position
-    angle: the angle of the arc
-    '''
+
     def arc_to_lines_cw(self, x_start, y_start, x_end, y_end, angle):
-        
-        if(self.distance(x_start, y_start, x_end, y_end) <= self.step_size):
-            
-            rtrn = 'G1 X{0:0.6f} Y{1:0.6f}'.format(x_end, y_end)
+        self.arc_to_lines(x_start, y_start, x_end, y_end, angle, True)
 
-            self.output_cmds.append(rtrn)
-            return
-        
-        dist_to_center = self.distance_from_arc_point_to_arc_center(angle/2, self.radius)
-        dist_between_points = self.distance(x_start, y_start, x_end, y_end)
-        
-        #find the x coordinate of the center point
-        pt1_x = (x_start + x_end)/2
-        
-        pt2_x = (y_start - y_end)/2
-        
-        pt3 = (2 * dist_to_center)/dist_between_points
-        pt3 = math.pow(pt3, 2)
-        pt3 = pt3 - 1
-        pt3 = math.sqrt(pt3)
-        
-        x = pt1_x + (pt2_x * pt3)
-        
-        #find the y coordinate of the center point
-        pt1_y = (y_start + y_end)/2
-        
-        pt2_y = (x_start - x_end)/2
-        
-        y = pt1_y - (pt2_y * pt3)
-
-        self.arc_to_lines_cw(x_start, y_start, x, y, angle/2)
-        self.arc_to_lines_cw(x, y, x_end, y_end, angle/2)
-        
-    
-    '''
-    x_start: the start x position
-    y_start: the start y position
-    x_end: the end x position
-    y_end: the end y position
-    angle: the angle of the arc
-    '''
     def arc_to_lines_ccw(self, x_start, y_start, x_end, y_end, angle):
-        
-        if(self.distance(x_start, y_start, x_end, y_end) <= self.step_size):
-            
-            rtrn = 'G1 X{0:0.6f} Y{1:0.6f}'.format(x_end, y_end)
+        self.arc_to_lines(x_start, y_start, x_end, y_end, angle, False)
 
+    def arc_to_lines(self, x_start, y_start, x_end, y_end, angle, cw):
+        if self.distance(x_start, y_start, x_end, y_end) <= self.step_size:
+            rtrn = 'G1 X{0:0.6f} Y{1:0.6f}'.format(x_end, y_end)
             self.output_cmds.append(rtrn)
             return
-        
+
         dist_to_center = self.distance_from_arc_point_to_arc_center(angle/2, self.radius)
         dist_between_points = self.distance(x_start, y_start, x_end, y_end)
-        
-        #find the x coordinate of the center point
-        pt1_x = (x_end + x_start)/2
-        
-        pt2_x = (y_end - y_start)/2
-        
+
+        # find the x coordinate of the center point
+        pt1_x = (x_start + x_end)/2 if cw else (x_end + x_start)/2
+        pt2_x = (y_start - y_end)/2 if cw else (y_end - y_start)/2
         pt3 = (2 * dist_to_center)/dist_between_points
         pt3 = math.pow(pt3, 2)
         pt3 = pt3 - 1
         pt3 = math.sqrt(pt3)
-        
         x = pt1_x + (pt2_x * pt3)
-        
-        #find the y coordinate of the center point
-        pt1_y = (y_end + y_start)/2
-        
-        pt2_y = (x_end - x_start)/2
-        
+
+        # find the y coordinate of the center point
+        pt1_y = (y_start + y_end)/2 if cw else (y_end + y_start)/2
+        pt2_y = (x_start - x_end)/2 if cw else (x_end - x_start)/2
         y = pt1_y - (pt2_y * pt3)
 
-        self.arc_to_lines_ccw(x_start, y_start, x, y, angle/2)
-        self.arc_to_lines_ccw(x, y, x_end, y_end, angle/2)
-    
+        self.arc_to_lines(x_start, y_start, x, y, angle/2, cw)
+        self.arc_to_lines(x, y, x_end, y_end, angle/2, cw)
+
     def get_output_cmds(self):
     
         return self.output_cmds
-
 
 
 
