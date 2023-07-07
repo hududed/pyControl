@@ -1,55 +1,18 @@
 import math
 import os
 from os.path import exists
+from pathlib import Path
 
 import arcconverter
-from config import GCODE_INPUT, TRJ_OUTPUT
 
 '''
 author: Austin Barner
 preferred email: abarner@uwyo.edu
 personal email: abarner99@gmail.com
 '''
-
-class GCodeCommand:
-    def __init__(self, cmd):
-        self.cmd = cmd
-        self.split_cmd = cmd.split(" ")
-        self.cmd_type = self.split_cmd[0]
-    
-    def __str__(self):
-        return self.cmd
-
-    def is_move_command(self):
-        return self.cmd_type in ['G0', 'G1', 'G2', 'G3']
-
-    def is_arc_command(self):
-        return self.cmd_type in ['G2', 'G3']
-
-    def is_absolute_mode_command(self):
-        return self.cmd_type.rstrip() == 'G90'
-
-    def is_relative_mode_command(self):
-        return self.cmd_type.rstrip() == 'G91'
-
-    def get_move_params(self):
-        x, y, i, j = 0, 0, 0, 0
-        for arg in self.split_cmd:
-            if arg[0] == 'X':
-                x = float(arg[1:])
-            elif arg[0] == 'Y':
-                y = float(arg[1:])
-            elif arg[0] == 'I':
-                i = float(arg[1:])
-            elif arg[0] == 'J':
-                j = float(arg[1:])
-        return x, y, i, j
-
-    def to_abs_command(self, x, y, i, j):
-        if self.is_arc_command():
-            return '{0} X{1:0.6f} Y{2:0.6f} I{3:0.6f} J{4:0.6f}'.format(self.cmd_type, x, y, i, j)
-        else:
-            return '{0} X{1:0.6f} Y{2:0.6f}'.format(self.cmd_type, x, y)
+DATA_PATH = Path('data/')
+GCODE_INPUT = DATA_PATH / 'test2.gcode'
+TRJ_OUTPUT = DATA_PATH / 'trajectory.trj'
 
 class GcodeConverter:
 
@@ -98,7 +61,7 @@ class GcodeConverter:
         
         self.revised_gcode = []
         
-        # self.init_revised_gcode()
+        self.init_revised_gcode()
         
 
     '''
@@ -149,74 +112,136 @@ class GcodeConverter:
         x = 0
         y = 0
         
-        # for cmd in self.gcode_cmds:
+        for cmd in self.gcode_cmds:
         
-        #     split_cmd = cmd.split(" ")
+            split_cmd = cmd.split(" ")
             
-        #     if split_cmd[0] == 'G1':
+            if split_cmd[0] == 'G1':
             
-        #         self.revised_gcode.append(cmd.rstrip())
+                self.revised_gcode.append(cmd.rstrip())
                 
-        #         for arg in split_cmd:
+                for arg in split_cmd:
             
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
                 
-        #     elif split_cmd[0] == 'G2':
+            elif split_cmd[0] == 'G2':
             
-        #         arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
+                arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
                 
-        #         for arc_cmd in arc.get_output_cmds():
-        #             self.revised_gcode.append(arc_cmd.rstrip())
+                for arc_cmd in arc.get_output_cmds():
+                    self.revised_gcode.append(arc_cmd.rstrip())
                 
-        #         for arg in split_cmd:
+                for arg in split_cmd:
             
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
                 
-        #     elif split_cmd[0] == 'G3':
+            elif split_cmd[0] == 'G3':
             
-        #         arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
+                arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
                 
-        #         for arc_cmd in arc.get_output_cmds():
-        #             self.revised_gcode.append(arc_cmd.rstrip())
+                for arc_cmd in arc.get_output_cmds():
+                    self.revised_gcode.append(arc_cmd.rstrip())
                     
-        #         for arg in split_cmd:
+                for arg in split_cmd:
             
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
                         
-        #     else:
+            else:
             
-        #         self.revised_gcode.append(cmd.rstrip())
+                self.revised_gcode.append(cmd.rstrip())
+    
     
     def convert_rel_to_abs(self, start_x=0, start_y=0):
+    
         curr_x = start_x
         curr_y = start_y
+        
         index = 0
+        
         is_rel = False
+        
         for cmd in self.gcode_cmds:
-            gcode_cmd = GCodeCommand(cmd)
-            if gcode_cmd.is_move_command():
-                x, y, i, j = gcode_cmd.get_move_params()
-                if is_rel:
-                    x += curr_x
-                    y += curr_y
-                self.gcode_cmds[index] = gcode_cmd.to_abs_command(x, y, i, j)
-                curr_x = x
-                curr_y = y
-            elif gcode_cmd.is_absolute_mode_command():
+            
+            split_cmd = cmd.split(" ")
+            
+            if split_cmd[0] == 'G1' and is_rel:
+            
+                x = 0
+                y = 0
+                
+                for arg in split_cmd:
+            
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
+                
+                self.gcode_cmds[index] = 'G1 X{0:0.6f} Y{1:0.6f}'.format(curr_x + x, curr_y + y)
+                curr_x = curr_x + x
+                curr_y = curr_y + y
+                
+            elif split_cmd[0] == 'G2'  and is_rel:
+            
+                x = 0
+                y = 0
+                i = 0
+                j = 0
+                
+                for arg in split_cmd:
+            
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
+                    elif arg[0] == 'I':
+                        i = float(arg[1:])
+                    elif arg[0] == 'J':
+                        j = float(arg[1:])
+                
+                self.gcode_cmds[index] = 'G2 X{0:0.6f} Y{1:0.6f} I{2:0.6f} J{3:0.6f}'.format(curr_x + x, curr_y + y, i, j)
+                curr_x = curr_x + x
+                curr_y = curr_y + y
+                
+            elif split_cmd[0] == 'G3'  and is_rel:
+            
+                x = 0
+                y = 0
+                i = 0
+                j = 0
+                
+                for arg in split_cmd:
+            
+                    if arg[0] == 'X':
+                        x = float(arg[1:])
+                    elif arg[0] == 'Y':
+                        y = float(arg[1:])
+                    elif arg[0] == 'I':
+                        i = float(arg[1:])
+                    elif arg[0] == 'J':
+                        j = float(arg[1:])
+                
+                self.gcode_cmds[index] = 'G3 X{0:0.6f} Y{1:0.6f} I{2:0.6f} J{3:0.6f}'.format(curr_x + x, curr_y + y, i, j)
+                curr_x = curr_x + x
+                curr_y = curr_y + y
+                        
+            elif split_cmd[0].rstrip() == 'G90':
                 is_rel = False
-            elif gcode_cmd.is_relative_mode_command():
+            
+            elif split_cmd[0].rstrip() == "G91":
+            
                 is_rel = True
-                self.gcode_cmds[index] = GCodeCommand('G90').__str__()
-            index += 1
+                self.gcode_cmds[index] = 'G90'
+            
+            index = index + 1
                 
     '''
     print out all revised gcode commands
@@ -529,7 +554,7 @@ class GcodeConverter:
 
 gc = GcodeConverter(f"{GCODE_INPUT}", f"{TRJ_OUTPUT}")#type in the directory for the input .gcode file and the output .trj file 
 gc.print_revised_gcode()#comment out this line if you don't want the revised gcode printed to the console
-# gc.init_conversion()#call this command to start the .gcode -> .trj conversion
+gc.init_conversion()#call this command to start the .gcode -> .trj conversion
 
 
 
