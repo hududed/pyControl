@@ -21,43 +21,45 @@ class ArcConverter:
             self.start_ypos = start_ypos
             
         self.output_cmds: list[str] = []
+
+        self.parse_cmd(cmd)
         
-        #parse cmd
-        args = self.cmd.split(" ")
+        # #parse cmd
+        # args = self.cmd.split(" ")
         
-        if args[0] == 'G02' or args[0] == 'G2': #clockwise arc
-            #print('clockwise')
-            self.dir: str = 'cw'
+        # if args[0] == 'G02' or args[0] == 'G2': #clockwise arc
+        #     #print('clockwise')
+        #     self.dir: str = 'cw'
             
-        elif args[0] == 'G03' or args[0] == 'G3': #counter-clockwise arc
-            #print('counter-clockwise')
-            self.dir: str = 'ccw'
+        # elif args[0] == 'G03' or args[0] == 'G3': #counter-clockwise arc
+        #     #print('counter-clockwise')
+        #     self.dir: str = 'ccw'
         
-        else:
-            #print('invalid arc command provided, defaulting to a clockwise (G2) arc')
-            self.dir: str = 'cw'
+        # else:
+        #     #print('invalid arc command provided, defaulting to a clockwise (G2) arc')
+        #     self.dir: str = 'cw'
             
-        self.xoffset: float = 0
-        self.yoffset: float = 0
+        # self.xoffset: float = 0
+        # self.yoffset: float = 0
         
-        self.end_xpos: float = 0
-        self.end_ypos: float = 0
-        self.center_xpos: float = 0
-        self.center_ypos: float = 0
+        # self.end_xpos: float = 0
+        # self.end_ypos: float = 0
+        # self.center_xpos: float = 0
+        # self.center_ypos: float = 0
         
-        for arg in args:
+        # for arg in args:
             
-            if arg[0] == 'X':
-                self.end_xpos = float(arg[1:])
+        #     if arg[0] == 'X':
+        #         self.end_xpos = float(arg[1:])
                 
-            elif arg[0] == 'Y':
-                self.end_ypos = float(arg[1:])
+        #     elif arg[0] == 'Y':
+        #         self.end_ypos = float(arg[1:])
                 
-            elif arg[0] == 'I':
-                self.center_xpos = float(arg[1:])
+        #     elif arg[0] == 'I':
+        #         self.center_xpos = float(arg[1:])
                 
-            elif arg[0] == 'J':
-                self.center_ypos = float(arg[1:])
+        #     elif arg[0] == 'J':
+        #         self.center_ypos = float(arg[1:])
 
         #self.radius = self.distance(0, 0, self.center_xpos, self.center_ypos)#OG
         self.radius = self.distance(self.start_xpos, self.start_ypos, self.end_xpos, self.end_ypos)/2
@@ -73,46 +75,66 @@ class ArcConverter:
             self.arc_to_lines_ccw(self.start_xpos, self.start_ypos, self.end_xpos, self.end_ypos, self.angle)#OG
 
 
+    def parse_cmd(self, cmd: str) -> None:
+        self.cmd = cmd
+        args = self.cmd.split(" ")
+        
+        if args[0] == 'G02' or args[0] == 'G2': #clockwise arc
+            self.dir = 'cw'
+        elif args[0] == 'G03' or args[0] == 'G3': #counter-clockwise arc
+            self.dir = 'ccw'
+        else:
+            self.dir = 'cw'
+            
+        for arg in args:
+            if arg[0] == 'X':
+                self.end_xpos = float(arg[1:])
+            elif arg[0] == 'Y':
+                self.end_ypos = float(arg[1:])
+            elif arg[0] == 'I':
+                self.center_xpos = float(arg[1:])
+            elif arg[0] == 'J':
+                self.center_ypos = float(arg[1:])
+
     '''
     returns the length of an arc
     '''
     def arc_length(self, x_start: float, y_start: float, x_end: float, y_end: float, x_center: float, y_center: float) -> float:
-        
-        a = self.distance(x_end, y_end, x_center, y_center)
-        b = self.distance(x_start, y_start, x_center, y_center)
-        c = self.distance(x_end, y_end, x_start, y_start)
+        a: float = self.distance(x_end, y_end, x_center, y_center)
+        b: float = self.distance(x_start, y_start, x_center, y_center)
+        c: float = self.distance(x_end, y_end, x_start, y_start)
 
-        num = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
-        den = 2 * a * b
+        num: float = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
+        den: float = 2 * a * b
         if den == 0:
             return 0
-        div = num / den
+        div: float = num / den
         div *= -1
-        
-        rad = math.acos(div)
+
+        rad: float = math.acos(div)
         if self.dir == 'ccw':
             rad = (2 * math.pi) - rad
-        
-        #print('arc length', (a * rad))
-        return a * rad
+
+        length: float = a * rad
+        return length
     
     
     '''
     returns the angle of an arc
     '''
     def arc_angle(self, x_start: float, y_start: float, x_end: float, y_end: float, x_center: float, y_center: float) -> float:
-        a = self.distance(x_end, y_end, x_center, y_center)
-        b = self.distance(x_start, y_start, x_center, y_center)
-        c = self.distance(x_end, y_end, x_start, y_start)
+        a: float = self.distance(x_end, y_end, x_center, y_center)
+        b: float = self.distance(x_start, y_start, x_center, y_center)
+        c: float = self.distance(x_end, y_end, x_start, y_start)
 
-        num = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
-        den = 2 * a * b
+        num: float = math.pow(c, 2) - math.pow(a, 2) - math.pow(b, 2)
+        den: float = 2 * a * b
         if den == 0:
-            return math.degrees(math.acos(np.round(0, 6)))
-        div = num / den
+            return math.degrees(math.acos(round(0, 6)))
+        div: float = num / den
         div *= -1
 
-        rad = math.acos(np.round(div, 6))
+        rad: float = math.acos(round(div, 6))
 
         # For now, I am assuming all angles are <= 180 degrees, so I am only using the calculation for the minor angle. This may change later.
         return math.degrees(rad)
