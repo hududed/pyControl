@@ -6,7 +6,7 @@ import numpy as np
 class ArcConverter:
     
     
-    def __init__(self, cmd, start_xpos=0, start_ypos=0, step_size=0.1, mode='abs'):
+    def __init__(self, cmd: str, start_xpos: int=0, start_ypos: int=0, step_size: float=0.1, mode: str='abs') -> None:
         
         self.cmd = cmd
         self.step_size = step_size
@@ -20,30 +20,30 @@ class ArcConverter:
             self.start_xpos = start_xpos
             self.start_ypos = start_ypos
             
-        self.output_cmds = []
+        self.output_cmds: list[str] = []
         
         #parse cmd
         args = self.cmd.split(" ")
         
         if args[0] == 'G02' or args[0] == 'G2': #clockwise arc
             #print('clockwise')
-            self.dir = 'cw'
+            self.dir: str = 'cw'
             
         elif args[0] == 'G03' or args[0] == 'G3': #counter-clockwise arc
             #print('counter-clockwise')
-            self.dir = 'ccw'
+            self.dir: str = 'ccw'
         
         else:
             #print('invalid arc command provided, defaulting to a clockwise (G2) arc')
-            self.dir = 'cw'
+            self.dir: str = 'cw'
             
-        self.xoffset = 0
-        self.yoffset = 0
+        self.xoffset: float = 0
+        self.yoffset: float = 0
         
-        self.end_xpos = 0
-        self.end_ypos = 0
-        self.center_xpos = 0
-        self.center_ypos = 0
+        self.end_xpos: float = 0
+        self.end_ypos: float = 0
+        self.center_xpos: float = 0
+        self.center_ypos: float = 0
         
         for arg in args:
             
@@ -76,7 +76,7 @@ class ArcConverter:
     '''
     returns the length of an arc
     '''
-    def arc_length(self, x_start, y_start, x_end, y_end, x_center, y_center):
+    def arc_length(self, x_start: float, y_start: float, x_end: float, y_end: float, x_center: float, y_center: float) -> float:
         
         a = self.distance(x_end, y_end, x_center, y_center)
         b = self.distance(x_start, y_start, x_center, y_center)
@@ -100,7 +100,7 @@ class ArcConverter:
     '''
     returns the angle of an arc
     '''
-    def arc_angle(self, x_start, y_start, x_end, y_end, x_center, y_center):
+    def arc_angle(self, x_start: float, y_start: float, x_end: float, y_end: float, x_center: float, y_center: float) -> float:
         a = self.distance(x_end, y_end, x_center, y_center)
         b = self.distance(x_start, y_start, x_center, y_center)
         c = self.distance(x_end, y_end, x_start, y_start)
@@ -118,31 +118,26 @@ class ArcConverter:
         return math.degrees(rad)
 
 
-    def distance_from_arc_point_to_arc_center(self, arc_angle, arc_radius):
+    def distance_from_arc_point_to_arc_center(self, arc_angle: float, arc_radius: float) -> float:
         angle = arc_angle/2
         return math.sin(math.radians(angle)) * arc_radius * 2
 
 
-    def distance(self, x1, y1, x2, y2):
+    def distance(self, x1: float, y1: float, x2: float, y2: float) -> float:
         return math.hypot(x2 - x1, y2 - y1)
-        
     
-    def rotate_point(self, x_pos, y_pos, degree):
-        
+    def rotate_point(self, x_pos: float, y_pos: float, degree: float) -> list[float]:
         x_new = math.cos(degree) * (x_pos - self.center_xpos) - math.sin(degree) * (y_pos - self.center_ypos) + self.center_xpos
         y_new = math.sin(degree) * (x_pos - self.center_xpos) + math.cos(degree) * (y_pos - self.center_ypos) + self.center_ypos
-        rtrn = [x_new, y_new]
-        return rtrn
+        return [x_new, y_new]
 
-
-
-    def arc_to_lines_cw(self, x_start, y_start, x_end, y_end, angle):
+    def arc_to_lines_cw(self, x_start: float, y_start: float, x_end: float, y_end: float, angle: float) -> None:
         self.arc_to_lines(x_start, y_start, x_end, y_end, angle, True)
 
-    def arc_to_lines_ccw(self, x_start, y_start, x_end, y_end, angle):
+    def arc_to_lines_ccw(self, x_start: float, y_start: float, x_end: float, y_end: float, angle: float) -> None:
         self.arc_to_lines(x_start, y_start, x_end, y_end, angle, False)
 
-    def arc_to_lines(self, x_start, y_start, x_end, y_end, angle, cw):
+    def arc_to_lines(self, x_start: float, y_start: float, x_end: float, y_end: float, angle: float, cw: str) -> None:
         if self.distance(x_start, y_start, x_end, y_end) <= self.step_size:
             rtrn = 'G1 X{0:0.6f} Y{1:0.6f}'.format(x_end, y_end)
             self.output_cmds.append(rtrn)
@@ -168,8 +163,7 @@ class ArcConverter:
         self.arc_to_lines(x_start, y_start, x, y, angle/2, cw)
         self.arc_to_lines(x, y, x_end, y_end, angle/2, cw)
 
-    def get_output_cmds(self):
-    
+    def get_output_cmds(self) -> list[str]:
         return self.output_cmds
 
 
