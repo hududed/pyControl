@@ -1,15 +1,36 @@
 import math
 import os
 from os.path import exists
+from typing import Callable, List, Tuple
 
 import arcconverter
 from config import GCODE_INPUT, TRJ_OUTPUT
 
-'''
-author: Austin Barner
-preferred email: abarner@uwyo.edu
-personal email: abarner99@gmail.com
-'''
+
+def process_gcode_command(cmd: str, x: float, y: float, revised_gcode: List[str], arcstep: float, command_func: Callable[[str, float, float, float, float], Tuple[float, float]]) -> Tuple[float, float]:
+    revised_gcode.append(cmd.rstrip())
+    x, y = command_func(cmd, x, y, arcstep, revised_gcode)
+    return x, y
+
+def process_move_command(cmd: str, x: float, y: float, arcstep: float, revised_gcode: List[str]) -> Tuple[float, float]:
+    for arg in cmd.split(" "):
+        if arg[0] == 'X':
+            x = float(arg[1:])
+        elif arg[0] == 'Y':
+            y = float(arg[1:])
+    return x, y
+
+def process_arc_command(cmd: str, x: float, y: float, arcstep: float, revised_gcode: List[str]) -> Tuple[float, float]:
+    arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=arcstep, mode='abs')
+    for arc_cmd in arc.get_output_cmds():
+        revised_gcode.append(arc_cmd.rstrip())
+    for arg in cmd.split(" "):
+        if arg[0] == 'X':
+            x = float(arg[1:])
+        elif arg[0] == 'Y':
+            y = float(arg[1:])
+    return x, y
+
 
 class GCodeCommand:
     def __init__(self, cmd):
@@ -97,8 +118,10 @@ class GcodeConverter:
         self.currspeed = 0
         
         self.revised_gcode = []
+
+        self.convert_rel_to_abs(start_x=self.posx, start_y=self.posy)
         
-        # self.init_revised_gcode()
+        self.init_revised_gcode()
         
 
     '''
@@ -139,62 +162,26 @@ class GcodeConverter:
         
         return raw_cmds
     
+
+
+
     '''
     convert all gcode commands to g1 commands
     '''
     def init_revised_gcode(self):
-    
-        self.convert_rel_to_abs(start_x=self.posx, start_y=self.posy)
-    
+
         x = 0
         y = 0
-        
-        # for cmd in self.gcode_cmds:
-        
-        #     split_cmd = cmd.split(" ")
-            
-        #     if split_cmd[0] == 'G1':
-            
-        #         self.revised_gcode.append(cmd.rstrip())
-                
-        #         for arg in split_cmd:
-            
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
-                
-        #     elif split_cmd[0] == 'G2':
-            
-        #         arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
-                
-        #         for arc_cmd in arc.get_output_cmds():
-        #             self.revised_gcode.append(arc_cmd.rstrip())
-                
-        #         for arg in split_cmd:
-            
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
-                
-        #     elif split_cmd[0] == 'G3':
-            
-        #         arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
-                
-        #         for arc_cmd in arc.get_output_cmds():
-        #             self.revised_gcode.append(arc_cmd.rstrip())
-                    
-        #         for arg in split_cmd:
-            
-        #             if arg[0] == 'X':
-        #                 x = float(arg[1:])
-        #             elif arg[0] == 'Y':
-        #                 y = float(arg[1:])
-                        
-        #     else:
-            
-        #         self.revised_gcode.append(cmd.rstrip())
+        for cmd in self.gcode_cmds:
+            split_cmd = cmd.split(" ")
+            if split_cmd[0] == 'G1':
+                command_func = process_move_command
+            elif split_cmd[0] == 'G2' or split_cmd[0] == 'G3':
+                command_func = process_arc_command
+            else:
+                self.revised_gcode.append(cmd.rstrip())
+                continue
+            x, y = process_gcode_command(cmd, x, y, self.revised_gcode, self.arcstep, command_func)
     
     def convert_rel_to_abs(self, start_x=0, start_y=0):
         curr_x = start_x
