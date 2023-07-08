@@ -4,15 +4,13 @@ from os.path import exists
 from pathlib import Path
 
 import old_arcconverter
+from config import ALT_GCODE_INPUT, GCODE_INPUT, OLD_TRJ_OUTPUT
 
 '''
 author: Austin Barner
 preferred email: abarner@uwyo.edu
 personal email: abarner99@gmail.com
 '''
-DATA_PATH = Path('data/')
-GCODE_INPUT = DATA_PATH / 'test2.gcode'
-TRJ_OUTPUT = DATA_PATH / 'trajectory.trj'
 
 class GcodeConverter:
 
@@ -552,7 +550,7 @@ class GcodeConverter:
         return ('{0:0.6f} {1:0.6f} {2:0.6f} {3:0.6f} {4:0.6f} {5:0.6f} {6:0.6f}'.format(time, endx, velx, endy, vely, 0, 0))
 
 
-gc = GcodeConverter(f"{GCODE_INPUT}", f"{TRJ_OUTPUT}")#type in the directory for the input .gcode file and the output .trj file 
+gc = GcodeConverter(f"{GCODE_INPUT}", f"{OLD_TRJ_OUTPUT}")#type in the directory for the input .gcode file and the output .trj file 
 gc.print_revised_gcode()#comment out this line if you don't want the revised gcode printed to the console
 gc.init_conversion()#call this command to start the .gcode -> .trj conversion
 

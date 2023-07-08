@@ -516,4 +516,4 @@ class GcodeConverter:
 gc = GcodeConverter(f"{GCODE_INPUT}", f"{TRJ_OUTPUT}")#type in the directory for the input .gcode file and the output .trj file 
 # print("NEW")
 # gc.print_revised_gcode()#comment out this line if you don't want the revised gcode printed to the console
-# # gc.init_conversion()#call this command to start the .gcode -> .trj conversion
+gc.init_conversion()#call this command to start the .gcode -> .trj conversion
