@@ -3,7 +3,7 @@ import os
 from os.path import exists
 from pathlib import Path
 
-import arcconverter
+import old_arcconverter
 
 '''
 author: Austin Barner
@@ -129,7 +129,7 @@ class GcodeConverter:
                 
             elif split_cmd[0] == 'G2':
             
-                arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
+                arc = old_arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
                 
                 for arc_cmd in arc.get_output_cmds():
                     self.revised_gcode.append(arc_cmd.rstrip())
@@ -143,7 +143,7 @@ class GcodeConverter:
                 
             elif split_cmd[0] == 'G3':
             
-                arc = arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
+                arc = old_arcconverter.ArcConverter(cmd, start_xpos=x, start_ypos=y, step_size=self.arcstep, mode='abs')
                 
                 for arc_cmd in arc.get_output_cmds():
                     self.revised_gcode.append(arc_cmd.rstrip())

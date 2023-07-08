@@ -1,18 +1,18 @@
 import math
 import os
-from os.path import exists
 from typing import Callable, List, Tuple
 
 import arcconverter
 from config import GCODE_INPUT, TRJ_OUTPUT
+from old_gcodeconverter import GcodeConverter as old_gc
 
 
 def process_gcode_command(cmd: str, x: float, y: float, revised_gcode: List[str], arcstep: float, command_func: Callable[[str, float, float, float, float], Tuple[float, float]]) -> Tuple[float, float]:
-    revised_gcode.append(cmd.rstrip())
     x, y = command_func(cmd, x, y, arcstep, revised_gcode)
     return x, y
 
 def process_move_command(cmd: str, x: float, y: float, arcstep: float, revised_gcode: List[str]) -> Tuple[float, float]:
+    revised_gcode.append(cmd.rstrip())
     for arg in cmd.split(" "):
         if arg[0] == 'X':
             x = float(arg[1:])
@@ -515,10 +515,12 @@ class GcodeConverter:
 
 
 gc = GcodeConverter(f"{GCODE_INPUT}", f"{TRJ_OUTPUT}")#type in the directory for the input .gcode file and the output .trj file 
-gc.print_revised_gcode()#comment out this line if you don't want the revised gcode printed to the console
-# gc.init_conversion()#call this command to start the .gcode -> .trj conversion
+# print("NEW")
+# gc.print_revised_gcode()#comment out this line if you don't want the revised gcode printed to the console
+# # gc.init_conversion()#call this command to start the .gcode -> .trj conversion
 
+old = old_gc(f"{GCODE_INPUT}", f"{TRJ_OUTPUT}")
+# print("OLD")
+# old.print_revised_gcode()
 
-
-
-    
+assert old.revised_gcode == gc.revised_gcode, "The old and new gcode converters are not the same"
