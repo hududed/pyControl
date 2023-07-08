@@ -1,6 +1,5 @@
 import math
-
-import numpy as np
+from typing import List
 
 
 class ArcConverter:
@@ -19,7 +18,7 @@ class ArcConverter:
             self.start_xpos = start_xpos
             self.start_ypos = start_ypos
             
-        self.output_cmds: list[str] = []
+        self.output_cmds: List[str] = []
 
         self.parse_cmd(cmd)
 
@@ -113,7 +112,7 @@ class ArcConverter:
     def distance(self, x1: float, y1: float, x2: float, y2: float) -> float:
         return math.hypot(x2 - x1, y2 - y1)
     
-    def rotate_point(self, x_pos: float, y_pos: float, degree: float) -> list[float]:
+    def rotate_point(self, x_pos: float, y_pos: float, degree: float) -> List[float]:
         x_new = math.cos(degree) * (x_pos - self.center_xpos) - math.sin(degree) * (y_pos - self.center_ypos) + self.center_xpos
         y_new = math.sin(degree) * (x_pos - self.center_xpos) + math.cos(degree) * (y_pos - self.center_ypos) + self.center_ypos
         return [x_new, y_new]
@@ -150,7 +149,7 @@ class ArcConverter:
         self.arc_to_lines(x_start, y_start, x, y, angle/2, cw)
         self.arc_to_lines(x, y, x_end, y_end, angle/2, cw)
 
-    def get_output_cmds(self) -> list[str]:
+    def get_output_cmds(self) -> List[str]:
         return self.output_cmds
 
 
