@@ -4,7 +4,6 @@ from typing import Callable, List, Tuple
 
 import arcconverter
 from config import GCODE_INPUT, TRJ_OUTPUT
-from old_gcodeconverter import GcodeConverter as old_gc
 
 
 def process_gcode_command(cmd: str, x: float, y: float, revised_gcode: List[str], arcstep: float, command_func: Callable[[str, float, float, float, float], Tuple[float, float]]) -> Tuple[float, float]:
