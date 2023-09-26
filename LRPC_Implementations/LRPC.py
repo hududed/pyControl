@@ -44,7 +44,29 @@ import threading
 
 #%% Import Libraries
 
+# #Program and System Control Libraries
+# import os 
+# import threading
+# import time
+# from datetime import datetime, timedelta
+# import numpy as np
+# import pandas as pd
+# import sys
+# import glob
 
+# #Cell Control Libraries (e.g. position, pressure, mirrors)
+# from newportxps import NewportXPS
+# from flipper import mirror
+
+
+# #from pymeasure.instruments.edwards import NXDS
+
+# #Raman Device and Software Control Libraries
+# import spectra as IsoPlane #import spectrometer codes
+
+# #Laser Control Libraries
+# from pymeasure.instruments.lighthousephotonics import Sprout
+# from fits import new_plot_LIG
 
 # import pressure as pressure_control
 #%% Operational Setup
@@ -137,7 +159,7 @@ class SystemControl:
         vacuum_pressure = self.pressure_control.current_pressure()
         
         #5 is an arbitrary low number and can be changed as needed
-        if vacuum_pressure < 5:
+        if vacuum_pressure < 8:
             self.fill_with_inert()
             self.decompress_to_pressure(final_pressure)
         elif vacuum_pressure > 5000:
@@ -180,7 +202,6 @@ class SystemControl:
         self._laser.write("OPMODE=Off")
         
     def set_line_power(self, laser_power):
-        # self._laser.power = (laser_power/0.0994)/1000
         self._laser.power = (laser_power/0.2163)/1000
 
         
